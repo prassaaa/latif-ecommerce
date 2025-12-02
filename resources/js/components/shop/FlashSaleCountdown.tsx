@@ -60,11 +60,11 @@ export function FlashSaleCountdown({ endDate, title = 'Flash Sale Berakhir Dalam
     ];
 
     return (
-        <div className={`bg-gradient-to-r from-red-600 to-orange-500 rounded-2xl p-6 text-white ${className}`}>
+        <div className={`bg-gradient-to-r from-terra-800 to-wood-dark rounded-2xl p-6 text-white ${className}`}>
             <div className="flex items-center justify-center gap-2 mb-4">
-                <Flame className="animate-pulse" size={24} />
+                <Flame className="animate-pulse text-wood-light" size={24} />
                 <h3 className="font-medium text-lg">{title}</h3>
-                <Clock size={20} />
+                <Clock size={20} className="text-wood-light" />
             </div>
 
             <div className="flex items-center justify-center gap-3">
@@ -121,7 +121,7 @@ export function FlashSaleCountdownCompact({ endDate }: { endDate: Date }) {
     }, [endDate]);
 
     return (
-        <div className="flex items-center gap-1.5 bg-red-500 text-white px-2.5 py-1 rounded-full text-xs font-medium">
+        <div className="flex items-center gap-1.5 bg-wood-dark text-white px-2.5 py-1 rounded-full text-xs font-medium">
             <Clock size={12} />
             <span className="tabular-nums">{timeLeft}</span>
         </div>

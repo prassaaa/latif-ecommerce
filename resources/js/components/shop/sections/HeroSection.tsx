@@ -39,7 +39,7 @@ export const HeroSection = () => {
 
                 <div className="relative h-[600px] lg:h-[800px] w-full order-1 lg:order-2 flex items-center justify-center lg:justify-end">
                     <motion.div style={{ y: y1 }} className="absolute top-20 left-10 md:left-20 w-64 h-80 z-20 hidden md:block">
-                        <img src="https://images.unsplash.com/photo-1594040226829-7f2c1c270259?q=80&w=600&auto=format&fit=crop" className="w-full h-full object-cover rounded-2xl shadow-2xl" alt="Interior Detail" />
+                        <img src="https://images.unsplash.com/photo-1567225557594-88d73e55f2cb?q=80&w=600&auto=format&fit=crop" className="w-full h-full object-cover rounded-2xl shadow-2xl" alt="Interior Detail" />
                     </motion.div>
 
                     <motion.div style={{ y: y2 }} className="relative z-10 w-full md:w-[80%] h-[90%] rounded-t-[200px] rounded-b-[20px] overflow-hidden shadow-2xl">

@@ -39,12 +39,12 @@ export default function HotSale({ products, categories, filters }: Props) {
 
             <main className="min-h-screen bg-sand-50 pt-28 pb-20">
                 {/* Hero Banner */}
-                <div className="bg-gradient-to-r from-red-600 to-orange-500 text-white py-16 mb-12">
+                <div className="bg-gradient-to-r from-terra-800 to-wood-dark text-white py-16 mb-12">
                     <div className="max-w-[1400px] mx-auto px-6 md:px-12 text-center">
                         <div className="flex items-center justify-center gap-3 mb-4">
-                            <Flame size={40} className="animate-pulse" />
+                            <Flame size={40} className="animate-pulse text-wood-light" />
                             <h1 className="font-serif text-4xl md:text-5xl font-bold">HOT SALE</h1>
-                            <Flame size={40} className="animate-pulse" />
+                            <Flame size={40} className="animate-pulse text-wood-light" />
                         </div>
                         <p className="text-xl opacity-90">Diskon hingga 70% untuk produk pilihan!</p>
                         <p className="text-sm mt-2 opacity-75">Penawaran terbatas, buruan sebelum kehabisan!</p>
@@ -137,9 +137,9 @@ function ProductCard({ product }: { product: ApiProduct }) {
             <div className="relative aspect-square overflow-hidden">
                 <img src={imageUrl} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 {product.has_discount && (
-                    <span className="absolute top-3 left-3 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">-{product.discount_percentage}%</span>
+                    <span className="absolute top-3 left-3 bg-wood-dark text-white px-3 py-1 rounded-full text-sm font-bold">-{product.discount_percentage}%</span>
                 )}
-                <span className="absolute top-3 right-3 bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+                <span className="absolute top-3 right-3 bg-wood text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1">
                     <Flame size={14} />HOT
                 </span>
             </div>
@@ -150,7 +150,7 @@ function ProductCard({ product }: { product: ApiProduct }) {
                     <span className="text-xs text-terra-500 ml-1">({product.review_count})</span>
                 </div>
                 <div className="flex items-end gap-2">
-                    <span className="text-lg font-bold text-red-600">{product.final_price_formatted}</span>
+                    <span className="text-lg font-bold text-wood-dark">{product.final_price_formatted}</span>
                     {product.has_discount && <span className="text-sm text-terra-400 line-through">{product.price_formatted}</span>}
                 </div>
             </div>

@@ -29,7 +29,7 @@ const PROMOS: PromoData[] = [
         ctaText: 'Lihat Sekarang',
         ctaLink: '/shop/hot-sale',
         icon: 'percent',
-        bgColor: 'from-red-600 to-orange-500',
+        bgColor: 'from-terra-800 to-wood-dark',
     },
     {
         id: 'free-shipping',
@@ -38,7 +38,7 @@ const PROMOS: PromoData[] = [
         ctaText: 'Belanja Sekarang',
         ctaLink: '/shop/products',
         icon: 'truck',
-        bgColor: 'from-blue-600 to-cyan-500',
+        bgColor: 'from-terra-700 to-terra-900',
     },
     {
         id: 'new-member',
@@ -47,7 +47,7 @@ const PROMOS: PromoData[] = [
         ctaText: 'Daftar Sekarang',
         ctaLink: '/register',
         icon: 'gift',
-        bgColor: 'from-purple-600 to-pink-500',
+        bgColor: 'from-wood to-wood-dark',
     },
 ];
 

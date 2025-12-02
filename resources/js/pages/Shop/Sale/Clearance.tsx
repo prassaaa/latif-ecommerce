@@ -36,16 +36,16 @@ export default function Clearance({ products, categories, filters }: Props) {
 
             <main className="min-h-screen bg-sand-50 pt-28 pb-20">
                 {/* Hero Banner */}
-                <div className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-16 mb-12">
+                <div className="bg-gradient-to-r from-terra-700 to-terra-900 text-white py-16 mb-12">
                     <div className="max-w-[1400px] mx-auto px-6 md:px-12 text-center">
                         <div className="flex items-center justify-center gap-3 mb-4">
-                            <Tag size={40} />
+                            <Tag size={40} className="text-wood-light" />
                             <h1 className="font-serif text-4xl md:text-5xl font-bold">CLEARANCE SALE</h1>
-                            <Tag size={40} />
+                            <Tag size={40} className="text-wood-light" />
                         </div>
                         <p className="text-xl opacity-90">Cuci Gudang! Harga Spesial untuk Stok Terbatas</p>
                         <div className="flex items-center justify-center gap-2 mt-4 text-sm opacity-75">
-                            <Clock size={16} />
+                            <Clock size={16} className="text-wood-light" />
                             <span>Selama persediaan masih ada</span>
                         </div>
                     </div>
@@ -127,11 +127,11 @@ function ProductCard({ product }: { product: ApiProduct }) {
             <div className="relative aspect-square overflow-hidden">
                 <img src={imageUrl} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 {product.has_discount && (
-                    <span className="absolute top-3 left-3 bg-purple-600 text-white px-3 py-1 rounded-full text-sm font-bold">-{product.discount_percentage}%</span>
+                    <span className="absolute top-3 left-3 bg-terra-800 text-white px-3 py-1 rounded-full text-sm font-bold">-{product.discount_percentage}%</span>
                 )}
-                <span className="absolute top-3 right-3 bg-indigo-500 text-white px-3 py-1 rounded-full text-xs font-medium">CLEARANCE</span>
+                <span className="absolute top-3 right-3 bg-terra-700 text-white px-3 py-1 rounded-full text-xs font-medium">CLEARANCE</span>
                 {product.is_low_stock && (
-                    <span className="absolute bottom-3 left-3 bg-red-500 text-white px-3 py-1 rounded-full text-xs font-medium">Stok Terbatas!</span>
+                    <span className="absolute bottom-3 left-3 bg-wood-dark text-white px-3 py-1 rounded-full text-xs font-medium">Stok Terbatas!</span>
                 )}
             </div>
             <div className="p-4">
@@ -141,7 +141,7 @@ function ProductCard({ product }: { product: ApiProduct }) {
                     <span className="text-xs text-terra-500 ml-1">({product.review_count})</span>
                 </div>
                 <div className="flex items-end gap-2">
-                    <span className="text-lg font-bold text-purple-600">{product.final_price_formatted}</span>
+                    <span className="text-lg font-bold text-terra-800">{product.final_price_formatted}</span>
                     {product.has_discount && <span className="text-sm text-terra-400 line-through">{product.price_formatted}</span>}
                 </div>
             </div>
