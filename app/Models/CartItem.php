@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $quantity
  * @property int $unit_price
  * @property array|null $options
+ * @property bool $is_saved_for_later
  */
 class CartItem extends Model
 {
@@ -31,6 +32,7 @@ class CartItem extends Model
         'quantity',
         'unit_price',
         'options',
+        'is_saved_for_later',
     ];
 
     protected function casts(): array
@@ -39,6 +41,7 @@ class CartItem extends Model
             'quantity' => 'integer',
             'unit_price' => 'integer',
             'options' => 'array',
+            'is_saved_for_later' => 'boolean',
         ];
     }
 

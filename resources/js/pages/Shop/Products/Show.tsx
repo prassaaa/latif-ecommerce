@@ -5,7 +5,7 @@ import {
     Star, Heart, ShoppingBag, Minus, Plus, ChevronLeft, ChevronRight,
     Truck, Shield, RotateCcw, Check, Share2, ZoomIn, X
 } from 'lucide-react';
-import { Header, Footer, RecentlyViewedSection, saveToRecentlyViewed, WhatsAppButton } from '@/components/shop';
+import { Header, Footer, RecentlyViewedSection, saveToRecentlyViewed, WhatsAppButton, ShareModal } from '@/components/shop';
 import { ApiProduct, ProductImage } from '@/types/shop';
 
 interface Props {
@@ -18,6 +18,7 @@ export default function ProductShow({ product, relatedProducts }: Props) {
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
     const [isZoomed, setIsZoomed] = useState(false);
     const [isWishlisted, setIsWishlisted] = useState(false);
+    const [isShareOpen, setIsShareOpen] = useState(false);
 
     // Save to recently viewed on mount
     useEffect(() => {
@@ -57,6 +58,7 @@ export default function ProductShow({ product, relatedProducts }: Props) {
                             isWishlisted={isWishlisted}
                             setIsWishlisted={setIsWishlisted}
                             onAddToCart={handleAddToCart}
+                            onShare={() => setIsShareOpen(true)}
                         />
                     </div>
                     {/* Customer Reviews */}
@@ -78,6 +80,17 @@ export default function ProductShow({ product, relatedProducts }: Props) {
                 currentIndex={selectedImageIndex}
                 setCurrentIndex={setSelectedImageIndex}
             />
+
+            {/* Share Modal */}
+            <ShareModal
+                isOpen={isShareOpen}
+                onClose={() => setIsShareOpen(false)}
+                url={`/shop/products/${product.slug}`}
+                title={product.name}
+                description={product.short_description || undefined}
+                imageUrl={images[0]?.image_url}
+            />
+
             <Footer />
 
             {/* WhatsApp Button */}
@@ -174,9 +187,10 @@ interface ProductInfoProps {
     isWishlisted: boolean;
     setIsWishlisted: (w: boolean) => void;
     onAddToCart: () => void;
+    onShare: () => void;
 }
 
-function ProductInfo({ product, quantity, setQuantity, isWishlisted, setIsWishlisted, onAddToCart }: ProductInfoProps) {
+function ProductInfo({ product, quantity, setQuantity, isWishlisted, setIsWishlisted, onAddToCart, onShare }: ProductInfoProps) {
     return (
         <div className="space-y-6">
             <div className="flex items-center gap-3 text-sm text-terra-500">
@@ -224,7 +238,7 @@ function ProductInfo({ product, quantity, setQuantity, isWishlisted, setIsWishli
                 <button onClick={() => setIsWishlisted(!isWishlisted)} className={`p-4 rounded-full border transition-colors ${isWishlisted ? 'bg-red-50 border-red-200 text-red-500' : 'border-terra-200 hover:border-terra-900'}`}>
                     <Heart size={20} className={isWishlisted ? 'fill-current' : ''} />
                 </button>
-                <button className="p-4 rounded-full border border-terra-200 hover:border-terra-900"><Share2 size={20} /></button>
+                <button onClick={onShare} className="p-4 rounded-full border border-terra-200 hover:border-terra-900 hover:bg-terra-50 transition-colors"><Share2 size={20} /></button>
             </div>
             <div className="grid grid-cols-3 gap-4 py-6 border-t border-terra-100">
                 <div className="text-center"><Truck className="mx-auto text-wood mb-2" size={24} /><p className="text-sm font-medium text-terra-900">Gratis Ongkir</p><p className="text-xs text-terra-500">Min. Rp 5 Juta</p></div>

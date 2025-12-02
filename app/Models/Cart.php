@@ -51,12 +51,28 @@ class Cart extends Model
         return $this->hasMany(CartItem::class);
     }
 
+    /**
+     * Get only active cart items (not saved for later).
+     */
+    public function activeItems(): HasMany
+    {
+        return $this->hasMany(CartItem::class)->where('is_saved_for_later', false);
+    }
+
+    /**
+     * Get only saved for later items.
+     */
+    public function savedItems(): HasMany
+    {
+        return $this->hasMany(CartItem::class)->where('is_saved_for_later', true);
+    }
+
     // ==================== Accessors ====================
 
     public function getSubtotalAttribute(): int
     {
         /** @var \Illuminate\Database\Eloquent\Collection<int, CartItem> $items */
-        $items = $this->items;
+        $items = $this->activeItems;
 
         return $items->sum(fn (CartItem $item) => $item->subtotal);
     }
@@ -78,7 +94,12 @@ class Cart extends Model
 
     public function getItemCountAttribute(): int
     {
-        return $this->items->sum('quantity');
+        return $this->activeItems->sum('quantity');
+    }
+
+    public function getSavedItemCountAttribute(): int
+    {
+        return $this->savedItems->sum('quantity');
     }
 
     public function getFormattedSubtotalAttribute(): string

@@ -19,7 +19,7 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ cartCount, onCartClick, onLogoClick, bannerVisible = false }) => {
-    const { auth } = usePage().props as { auth?: { user?: AuthUser } };
+    const { auth, wishlistCount } = usePage().props as { auth?: { user?: AuthUser }; wishlistCount?: number };
     const user = auth?.user;
 
     const [scrolled, setScrolled] = useState(false);
@@ -109,8 +109,13 @@ export const Header: React.FC<HeaderProps> = ({ cartCount, onCartClick, onLogoCl
                         </button>
 
                     {user && (
-                        <Link href="/shop/wishlist" className="p-2 text-terra-900 hover:bg-terra-100 rounded-full transition-colors hidden md:flex">
+                        <Link href="/shop/wishlist" className="relative p-2 text-terra-900 hover:bg-terra-100 rounded-full transition-colors hidden md:flex">
                             <Heart size={20} />
+                            {(wishlistCount ?? 0) > 0 && (
+                                <span className="absolute -top-1 -right-1 w-5 h-5 bg-wood text-white text-[10px] flex items-center justify-center rounded-full border-2 border-white shadow-sm">
+                                    {wishlistCount}
+                                </span>
+                            )}
                         </Link>
                     )}
 

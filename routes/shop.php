@@ -46,6 +46,17 @@ Route::prefix('shop')->name('shop.')->group(function () {
     // Sale Pages
     Route::get('/hot-sale', [ProductController::class, 'hotSale'])->name('products.hot-sale');
     Route::get('/clearance', [ProductController::class, 'clearance'])->name('products.clearance');
+    Route::get('/stock-sale', [ProductController::class, 'stockSale'])->name('products.stock-sale');
+
+    // Custom Order
+    Route::get('/custom-order', fn() => \Inertia\Inertia::render('Shop/CustomOrder'))->name('custom-order');
+
+    // Static Pages
+    Route::get('/about', fn() => \Inertia\Inertia::render('Shop/About'))->name('about');
+    Route::get('/contact', fn() => \Inertia\Inertia::render('Shop/Contact'))->name('contact');
+
+    // Compare Products
+    Route::get('/compare', [ProductController::class, 'compare'])->name('products.compare');
 
     // Cart (accessible by guests and authenticated users)
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
@@ -54,6 +65,8 @@ Route::prefix('shop')->name('shop.')->group(function () {
     Route::delete('/cart/{cartItem}', [CartController::class, 'destroy'])->name('cart.destroy');
     Route::delete('/cart', [CartController::class, 'clear'])->name('cart.clear');
     Route::post('/cart/merge', [CartController::class, 'merge'])->name('cart.merge');
+    Route::post('/cart/{cartItem}/save-for-later', [CartController::class, 'saveForLater'])->name('cart.saveForLater');
+    Route::post('/cart/{cartItem}/move-to-cart', [CartController::class, 'moveToCart'])->name('cart.moveToCart');
 
     // Authenticated routes
     Route::middleware(['auth', 'verified'])->group(function () {

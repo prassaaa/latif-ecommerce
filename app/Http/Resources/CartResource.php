@@ -16,14 +16,31 @@ class CartResource extends JsonResource
     /** @return array<string, mixed> */
     public function toArray(Request $request): array
     {
+        // Separate active items and saved for later items
+        $allItems = $this->whenLoaded('items');
+        $activeItems = [];
+        $savedItems = [];
+
+        if ($allItems) {
+            foreach ($this->items as $item) {
+                if ($item->is_saved_for_later) {
+                    $savedItems[] = $item;
+                } else {
+                    $activeItems[] = $item;
+                }
+            }
+        }
+
         return [
             'id' => $this->id,
             'user_id' => $this->user_id,
             'session_id' => $this->session_id,
-            'items_count' => $this->items_count,
+            'items_count' => $this->item_count,
+            'saved_items_count' => $this->saved_item_count,
             'subtotal' => $this->subtotal,
             'subtotal_formatted' => $this->formatted_subtotal,
-            'items' => CartItemResource::collection($this->whenLoaded('items')),
+            'items' => CartItemResource::collection($activeItems),
+            'saved_items' => CartItemResource::collection($savedItems),
             'created_at' => $this->created_at?->toISOString(),
             'updated_at' => $this->updated_at?->toISOString(),
         ];

@@ -112,6 +112,30 @@ class CartController extends Controller
         ]);
     }
 
+    public function saveForLater(CartItem $cartItem): JsonResponse
+    {
+        $cartItem->update(['is_saved_for_later' => true]);
+
+        $cart = $cartItem->cart->fresh()->load('items.product.images');
+
+        return response()->json([
+            'message' => 'Produk disimpan untuk nanti.',
+            'cart' => new CartResource($cart),
+        ]);
+    }
+
+    public function moveToCart(CartItem $cartItem): JsonResponse
+    {
+        $cartItem->update(['is_saved_for_later' => false]);
+
+        $cart = $cartItem->cart->fresh()->load('items.product.images');
+
+        return response()->json([
+            'message' => 'Produk dipindahkan ke keranjang.',
+            'cart' => new CartResource($cart),
+        ]);
+    }
+
     private function getCart(Request $request): ?Cart
     {
         $user = $request->user();

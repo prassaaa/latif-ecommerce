@@ -3,9 +3,9 @@ import { Head, Link, router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import {
     Search, SlidersHorizontal, Grid3X3, LayoutList, X,
-    Star, ShoppingBag, Heart, ChevronLeft, ChevronRight
+    Star, ShoppingBag, Heart, ChevronLeft, ChevronRight, Eye
 } from 'lucide-react';
-import { Header, Footer } from '@/components/shop';
+import { Header, Footer, QuickViewModal } from '@/components/shop';
 import { ApiProduct, ApiCategory, PaginatedResponse, ProductFilters } from '@/types/shop';
 
 interface Props {
@@ -45,6 +45,7 @@ export default function ProductsIndex({ products, categories, currentCategory, f
         min: safeFilters.filter?.price_min,
         max: safeFilters.filter?.price_max,
     });
+    const [quickViewProduct, setQuickViewProduct] = useState<ApiProduct | null>(null);
 
     const applyFilters = useCallback(() => {
         const params: Record<string, string> = {};
@@ -159,7 +160,7 @@ export default function ProductsIndex({ products, categories, currentCategory, f
 
                         {/* Products Grid */}
                         <div className="flex-1">
-                            <ProductGrid products={products.data} viewMode={viewMode} />
+                            <ProductGrid products={products.data} viewMode={viewMode} onQuickView={setQuickViewProduct} />
                             <Pagination meta={products.meta} />
                         </div>
                     </div>
@@ -167,6 +168,7 @@ export default function ProductsIndex({ products, categories, currentCategory, f
             </main>
 
             <Footer />
+            <QuickViewModal product={quickViewProduct} isOpen={!!quickViewProduct} onClose={() => setQuickViewProduct(null)} />
         </>
     );
 }
@@ -280,9 +282,10 @@ function FilterSidebar({
 interface ProductGridProps {
     products: ApiProduct[];
     viewMode: 'grid' | 'list';
+    onQuickView: (product: ApiProduct) => void;
 }
 
-function ProductGrid({ products, viewMode }: ProductGridProps) {
+function ProductGrid({ products, viewMode, onQuickView }: ProductGridProps) {
     if (products.length === 0) {
         return (
             <div className="text-center py-20">
@@ -299,7 +302,7 @@ function ProductGrid({ products, viewMode }: ProductGridProps) {
             : 'space-y-6'
         }>
             {products.map((product, index) => (
-                <ProductCard key={product.id} product={product} viewMode={viewMode} index={index} />
+                <ProductCard key={product.id} product={product} viewMode={viewMode} index={index} onQuickView={onQuickView} />
             ))}
         </div>
     );
@@ -310,9 +313,10 @@ interface ProductCardProps {
     product: ApiProduct;
     viewMode: 'grid' | 'list';
     index: number;
+    onQuickView: (product: ApiProduct) => void;
 }
 
-function ProductCard({ product, viewMode, index }: ProductCardProps) {
+function ProductCard({ product, viewMode, index, onQuickView }: ProductCardProps) {
     const imageUrl = product.primary_image?.image_url
         || product.images?.[0]?.image_url
         || 'https://via.placeholder.com/400x400?text=No+Image';
@@ -328,12 +332,19 @@ function ProductCard({ product, viewMode, index }: ProductCardProps) {
                     href={`/shop/products/${product.slug}`}
                     className="flex gap-6 bg-white border border-terra-100 rounded-2xl p-4 hover:shadow-lg transition-shadow group"
                 >
-                    <div className="w-48 h-48 flex-shrink-0 rounded-xl overflow-hidden bg-sand-100">
+                    <div className="w-48 h-48 flex-shrink-0 rounded-xl overflow-hidden bg-sand-100 relative">
                         <img
                             src={imageUrl}
                             alt={product.name}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
+                        <button
+                            onClick={(e) => { e.preventDefault(); onQuickView(product); }}
+                            className="absolute bottom-2 right-2 p-2 rounded-full bg-white/90 hover:bg-white transition-colors opacity-0 group-hover:opacity-100"
+                            title="Quick View"
+                        >
+                            <Eye size={16} />
+                        </button>
                     </div>
                     <div className="flex-1 flex flex-col justify-between py-2">
                         <div>
@@ -357,10 +368,10 @@ function ProductCard({ product, viewMode, index }: ProductCardProps) {
                                 <p className="text-xl font-semibold text-terra-900">{product.final_price_formatted}</p>
                             </div>
                             <div className="flex gap-2">
-                                <button className="p-3 rounded-full border border-terra-200 hover:border-terra-900 transition-colors">
+                                <button onClick={(e) => { e.preventDefault(); }} className="p-3 rounded-full border border-terra-200 hover:border-terra-900 transition-colors">
                                     <Heart size={18} />
                                 </button>
-                                <button className="p-3 rounded-full bg-terra-900 text-white hover:bg-wood transition-colors">
+                                <button onClick={(e) => { e.preventDefault(); }} className="p-3 rounded-full bg-terra-900 text-white hover:bg-wood transition-colors">
                                     <ShoppingBag size={18} />
                                 </button>
                             </div>
@@ -396,6 +407,13 @@ function ProductCard({ product, viewMode, index }: ProductCardProps) {
                         </span>
                     )}
                     <div className="absolute bottom-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button
+                            onClick={(e) => { e.preventDefault(); onQuickView(product); }}
+                            className="p-3 rounded-full bg-white/90 hover:bg-white transition-colors"
+                            title="Quick View"
+                        >
+                            <Eye size={18} />
+                        </button>
                         <button
                             onClick={(e) => { e.preventDefault(); }}
                             className="p-3 rounded-full bg-white/90 hover:bg-white transition-colors"

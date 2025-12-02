@@ -24,3 +24,8 @@ export { PromoBanner } from './PromoBanner';
 export { RecentlyViewedSection, saveToRecentlyViewed, getRecentlyViewed } from './RecentlyViewed';
 export { WhatsAppButton } from './WhatsAppButton';
 
+// Modal Components
+export { QuickViewModal } from './QuickViewModal';
+export { CompareDrawer } from './CompareDrawer';
+export { ShareModal } from './ShareModal';
+

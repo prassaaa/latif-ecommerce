@@ -25,6 +25,7 @@ class CartItemResource extends JsonResource
             'subtotal' => $this->subtotal,
             'subtotal_formatted' => $this->formatted_subtotal,
             'options' => $this->options,
+            'is_saved_for_later' => $this->is_saved_for_later,
             'product' => new ProductResource($this->whenLoaded('product')),
         ];
     }
