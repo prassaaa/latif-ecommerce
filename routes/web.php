@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Customer\DashboardController;
 use App\Http\Controllers\SitemapController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -27,7 +28,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         if (auth()->user()->hasAnyRole(['super-admin', 'admin', 'manager', 'staff'])) {
             return redirect('/admin');
         }
-        return Inertia::render('dashboard');
+        return app(DashboardController::class)->index(request());
     })->name('dashboard');
 });
 

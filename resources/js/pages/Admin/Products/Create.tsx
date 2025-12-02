@@ -1,6 +1,7 @@
 import AdminLayout from '@/layouts/admin/admin-layout';
-import { Head, useForm, Link } from '@inertiajs/react';
-import { ArrowLeft } from 'lucide-react';
+import { Head, useForm, Link, router } from '@inertiajs/react';
+import { ArrowLeft, Upload, X } from 'lucide-react';
+import { useState, useRef } from 'react';
 
 interface Category {
     id: number;
@@ -12,7 +13,10 @@ interface CreateProductProps {
 }
 
 export default function CreateProduct({ categories }: CreateProductProps) {
-    const { data, setData, post, processing, errors } = useForm({
+    const [previewImages, setPreviewImages] = useState<{ file: File; preview: string }[]>([]);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const { data, setData, processing, errors } = useForm({
         name: '',
         sku: '',
         category_id: '',
@@ -24,9 +28,42 @@ export default function CreateProduct({ categories }: CreateProductProps) {
         is_featured: false,
     });
 
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files;
+        if (!files) return;
+
+        const newImages = Array.from(files).map(file => ({
+            file,
+            preview: URL.createObjectURL(file)
+        }));
+
+        setPreviewImages(prev => [...prev, ...newImages]);
+    };
+
+    const removeImage = (index: number) => {
+        setPreviewImages(prev => {
+            const newImages = [...prev];
+            URL.revokeObjectURL(newImages[index].preview);
+            newImages.splice(index, 1);
+            return newImages;
+        });
+    };
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post('/admin/products');
+
+        const formData = new FormData();
+        Object.entries(data).forEach(([key, value]) => {
+            formData.append(key, String(value));
+        });
+
+        previewImages.forEach((img, index) => {
+            formData.append(`images[${index}]`, img.file);
+        });
+
+        router.post('/admin/products', formData, {
+            forceFormData: true,
+        });
     };
 
     return (
@@ -102,6 +139,57 @@ export default function CreateProduct({ categories }: CreateProductProps) {
                                     placeholder="Deskripsi produk..."
                                 />
                             </div>
+                        </div>
+                    </div>
+
+                    {/* Images */}
+                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-terra-100">
+                        <h2 className="text-lg font-semibold text-terra-900 mb-4">Gambar Produk</h2>
+                        <div className="space-y-4">
+                            {/* Upload Area */}
+                            <div
+                                className="border-2 border-dashed border-terra-200 rounded-xl p-8 text-center hover:border-wood transition-colors cursor-pointer"
+                                onClick={() => fileInputRef.current?.click()}
+                            >
+                                <input
+                                    ref={fileInputRef}
+                                    type="file"
+                                    multiple
+                                    accept="image/*"
+                                    onChange={handleImageChange}
+                                    className="hidden"
+                                />
+                                <Upload className="w-12 h-12 mx-auto text-terra-400 mb-4" />
+                                <p className="text-terra-700 font-medium">Klik untuk upload gambar</p>
+                                <p className="text-terra-400 text-sm mt-1">PNG, JPG, WEBP hingga 2MB (Gambar pertama = utama)</p>
+                            </div>
+
+                            {/* Preview */}
+                            {previewImages.length > 0 && (
+                                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                                    {previewImages.map((img, index) => (
+                                        <div key={index} className="relative group">
+                                            <img
+                                                src={img.preview}
+                                                alt={`Preview ${index + 1}`}
+                                                className="w-full aspect-square object-cover rounded-xl border border-terra-100"
+                                            />
+                                            {index === 0 && (
+                                                <span className="absolute top-2 left-2 px-2 py-1 bg-wood text-white text-xs rounded-lg">
+                                                    Utama
+                                                </span>
+                                            )}
+                                            <button
+                                                type="button"
+                                                onClick={() => removeImage(index)}
+                                                className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                                            >
+                                                <X className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     </div>
 

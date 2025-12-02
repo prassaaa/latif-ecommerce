@@ -50,7 +50,10 @@ class CheckoutController extends Controller implements HasMiddleware
         return Inertia::render('Shop/Checkout/Index', [
             'cart' => new CartResource($cart),
             'addresses' => AddressResource::collection($addresses),
-            'paymentMethods' => PaymentMethod::cases(),
+            'paymentMethods' => collect(PaymentMethod::cases())->map(fn ($method) => [
+                'value' => $method->value,
+                'name' => $method->label(),
+            ])->all(),
         ]);
     }
 
