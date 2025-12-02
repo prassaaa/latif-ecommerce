@@ -7,6 +7,7 @@ interface PromoBannerProps {
     type?: 'banner' | 'popup';
     storageKey?: string;
     delayPopup?: number; // delay in ms before showing popup
+    onVisibilityChange?: (visible: boolean) => void; // callback when banner visibility changes
 }
 
 interface PromoData {
@@ -72,7 +73,7 @@ function shouldShowPromo(storageKey: string): boolean {
     return true;
 }
 
-export function PromoBanner({ type = 'banner', storageKey = 'promo_dismissed', delayPopup = 3000 }: PromoBannerProps) {
+export function PromoBanner({ type = 'banner', storageKey = 'promo_dismissed', delayPopup = 3000, onVisibilityChange }: PromoBannerProps) {
     const [currentPromo] = useState<PromoData>(() => getRandomPromo());
     const [isVisible, setIsVisible] = useState(() => type === 'banner' && shouldShowPromo(storageKey));
 
@@ -84,6 +85,13 @@ export function PromoBanner({ type = 'banner', storageKey = 'promo_dismissed', d
             return () => clearTimeout(timer);
         }
     }, [type, storageKey, delayPopup]);
+
+    // Notify parent about visibility changes (for banner type only)
+    useEffect(() => {
+        if (type === 'banner' && onVisibilityChange) {
+            onVisibilityChange(isVisible);
+        }
+    }, [isVisible, type, onVisibilityChange]);
 
     const handleDismiss = () => {
         setIsVisible(false);
@@ -100,7 +108,7 @@ export function PromoBanner({ type = 'banner', storageKey = 'promo_dismissed', d
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        className={`bg-gradient-to-r ${currentPromo.bgColor} text-white overflow-hidden`}
+                        className={`fixed top-0 left-0 right-0 z-50 bg-gradient-to-r ${currentPromo.bgColor} text-white overflow-hidden`}
                     >
                         <div className="max-w-[1400px] mx-auto px-4 py-2 flex items-center justify-between gap-4">
                             <div className="flex items-center gap-3 flex-1 justify-center">

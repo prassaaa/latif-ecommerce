@@ -15,9 +15,10 @@ interface HeaderProps {
     cartCount: number;
     onCartClick: () => void;
     onLogoClick: () => void;
+    bannerVisible?: boolean; // When promo banner is visible, shift header down
 }
 
-export const Header: React.FC<HeaderProps> = ({ cartCount, onCartClick, onLogoClick }) => {
+export const Header: React.FC<HeaderProps> = ({ cartCount, onCartClick, onLogoClick, bannerVisible = false }) => {
     const { auth } = usePage().props as { auth?: { user?: AuthUser } };
     const user = auth?.user;
 
@@ -80,9 +81,12 @@ export const Header: React.FC<HeaderProps> = ({ cartCount, onCartClick, onLogoCl
         }
     };
 
+    // Calculate top position based on banner visibility
+    const topPosition = bannerVisible ? 'top-10' : 'top-0';
+
     return (
         <>
-            <nav className={`fixed top-0 w-full z-40 transition-all duration-500 border-b ${scrolled ? 'bg-white/80 backdrop-blur-md py-4 border-terra-200' : 'bg-transparent py-6 border-transparent'}`}>
+            <nav className={`fixed ${topPosition} w-full z-40 transition-all duration-500 border-b ${scrolled ? 'bg-white/80 backdrop-blur-md py-4 border-terra-200' : 'bg-transparent py-6 border-transparent'}`}>
                 <div className="max-w-[1400px] mx-auto px-6 md:px-12 flex justify-between items-center">
                     <div className="flex items-center gap-1 cursor-pointer group" onClick={onLogoClick}>
                         <span className="font-serif text-3xl font-bold tracking-tight text-terra-900 relative z-10">

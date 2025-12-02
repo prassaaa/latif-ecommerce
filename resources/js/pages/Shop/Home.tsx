@@ -21,6 +21,7 @@ export default function Home() {
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
     const [cart, setCart] = useState<CartItem[]>([]);
     const [isCartOpen, setIsCartOpen] = useState(false);
+    const [bannerVisible, setBannerVisible] = useState(false);
 
     const addToCart = (product: Product) => {
         setCart(prev => {
@@ -86,7 +87,7 @@ export default function Home() {
             <Head title="Latif Living - Furniture Premium Indonesia" />
 
             {/* Promo Banner */}
-            <PromoBanner type="banner" storageKey="home_promo_banner" />
+            <PromoBanner type="banner" storageKey="home_promo_banner" onVisibilityChange={setBannerVisible} />
 
             {/* Noise Overlay */}
             <div className="bg-noise" />
@@ -95,6 +96,7 @@ export default function Home() {
                 cartCount={cartCount}
                 onCartClick={() => setIsCartOpen(true)}
                 onLogoClick={() => { setView('landing'); window.scrollTo(0, 0); }}
+                bannerVisible={bannerVisible}
             />
 
             <CartDrawer
