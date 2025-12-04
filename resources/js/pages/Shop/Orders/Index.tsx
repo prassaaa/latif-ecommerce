@@ -95,7 +95,7 @@ export default function OrdersIndex({ orders }: Props) {
 
 function OrderCard({ order }: { order: Order }) {
     const firstItem = order.items[0];
-    const imageUrl = firstItem?.product?.images?.[0]?.image_url || 'https://via.placeholder.com/100';
+    const imageUrl = firstItem?.product?.images?.[0]?.image_url || '/images/placeholder-product.svg';
     const otherItemsCount = order.items.length - 1;
 
     return (

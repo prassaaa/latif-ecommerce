@@ -105,7 +105,7 @@ class ProductController extends Controller implements HasMiddleware
         $product->load(['category', 'images', 'reviews.user']);
 
         return Inertia::render('Admin/Products/Show', [
-            'product' => new ProductResource($product),
+            'product' => (new ProductResource($product))->resolve(),
         ]);
     }
 
@@ -115,8 +115,8 @@ class ProductController extends Controller implements HasMiddleware
         $categories = Category::where('is_active', true)->orderBy('name')->get();
 
         return Inertia::render('Admin/Products/Edit', [
-            'product' => new ProductResource($product),
-            'categories' => CategoryResource::collection($categories),
+            'product' => (new ProductResource($product))->resolve(),
+            'categories' => CategoryResource::collection($categories)->resolve(),
             'statuses' => collect(ProductStatus::cases())->map(fn ($status) => [
                 'value' => $status->value,
                 'name' => $status->label(),

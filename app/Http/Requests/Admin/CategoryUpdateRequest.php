@@ -26,6 +26,7 @@ class CategoryUpdateRequest extends FormRequest
             'slug' => ['nullable', 'string', 'max:255', Rule::unique('categories')->ignore($categoryId)],
             'description' => ['nullable', 'string', 'max:1000'],
             'image' => ['nullable', 'image', 'max:2048'],
+            'remove_image' => ['nullable', 'boolean'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'is_active' => ['boolean'],
             'is_featured' => ['boolean'],

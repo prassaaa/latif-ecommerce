@@ -88,7 +88,7 @@ interface WishlistCardProps {
 }
 
 function WishlistCard({ product, onRemove, isRemoving }: WishlistCardProps) {
-    const imageUrl = product.primary_image?.image_url || product.images?.[0]?.image_url || 'https://via.placeholder.com/400';
+    const imageUrl = product.primary_image?.image_url || product.images?.[0]?.image_url || '/images/placeholder-product.svg';
 
     return (
         <motion.div

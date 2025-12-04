@@ -7,7 +7,7 @@ interface CategoriesSectionProps {
 }
 
 // Default placeholder image
-const PLACEHOLDER_IMAGE = 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=2000&auto=format&fit=crop';
+const PLACEHOLDER_IMAGE = '/images/placeholder-category.svg';
 
 export const CategoriesSection: React.FC<CategoriesSectionProps> = ({ categories }) => {
     // Ensure we have at least 3 categories for the layout

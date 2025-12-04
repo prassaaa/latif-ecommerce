@@ -20,6 +20,15 @@ class UpdateCategoryAction
             $data['slug'] = Str::slug($data['name']);
         }
 
+        // Handle image removal
+        if (isset($data['remove_image']) && $data['remove_image']) {
+            if ($category->image_path) {
+                Storage::disk('public')->delete($category->image_path);
+            }
+            $data['image_path'] = null;
+            unset($data['remove_image']);
+        }
+
         if ($image) {
             // Delete old image
             if ($category->image_path) {

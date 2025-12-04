@@ -17,7 +17,7 @@ export const QuickViewModal: React.FC<QuickViewModalProps> = ({ product, isOpen,
 
     if (!product) return null;
 
-    const images = product.images?.length ? product.images : [{ id: 0, image_url: product.primary_image?.image_url || 'https://via.placeholder.com/600', alt_text: product.name }];
+    const images = product.images?.length ? product.images : [{ id: 0, image_url: product.primary_image?.image_url || '/images/placeholder-product.svg', alt_text: product.name }];
 
     const handleAddToCart = () => {
         router.post('/shop/cart', { product_id: product.id, quantity }, { preserveScroll: true, onSuccess: () => onClose() });

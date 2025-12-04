@@ -29,7 +29,7 @@ export default function ProductShow({ product, relatedProducts }: Props) {
 
     const images = product.images?.length
         ? product.images
-        : [{ id: 0, image_url: 'https://via.placeholder.com/800x800?text=No+Image', alt_text: product.name } as ProductImage];
+        : [{ id: 0, image_url: '/images/placeholder-product.svg', alt_text: product.name } as ProductImage];
 
     const handleAddToCart = () => {
         router.post('/shop/cart', { product_id: product.id, quantity }, { preserveScroll: true });
@@ -194,7 +194,7 @@ function ImageGallery({ images, selectedIndex, setSelectedIndex, onZoom, product
                     {product.has_discount && (
                         <span className="bg-red-500 text-white px-4 py-2 rounded-full font-medium">-{product.discount_percentage}%</span>
                     )}
-                    {product.sale_type.value !== 'regular' && (
+                    {product.sale_type?.value && product.sale_type.value !== 'regular' && (
                         <span className="bg-wood text-white px-4 py-2 rounded-full font-medium">{product.sale_type.label}</span>
                     )}
                 </div>
@@ -315,7 +315,7 @@ function RelatedProducts({ products }: { products: ApiProduct[] }) {
             <h2 className="font-serif text-2xl text-terra-900 mb-8">Produk Terkait</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                 {products.map((product) => {
-                    const imageUrl = product.primary_image?.image_url || product.images?.[0]?.image_url || 'https://via.placeholder.com/400';
+                    const imageUrl = product.primary_image?.image_url || product.images?.[0]?.image_url || '/images/placeholder-product.svg';
                     return (
                         <Link key={product.id} href={`/shop/products/${product.slug}`} className="group">
                             <div className="aspect-square rounded-2xl overflow-hidden bg-sand-100 mb-3">

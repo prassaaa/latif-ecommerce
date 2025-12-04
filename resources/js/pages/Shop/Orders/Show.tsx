@@ -141,7 +141,7 @@ export default function OrderShow({ order }: Props) {
                             </h2>
                             <div className="space-y-4">
                                 {order.items.map((item) => {
-                                    const imageUrl = item.product?.images?.[0]?.image_url || 'https://via.placeholder.com/80';
+                                    const imageUrl = item.product?.images?.[0]?.image_url || '/images/placeholder-product.svg';
                                     return (
                                         <div key={item.id} className="flex gap-4 pb-4 border-b border-terra-100 last:border-0 last:pb-0">
                                             <img src={imageUrl} alt={item.product_name} className="w-20 h-20 rounded-lg object-cover bg-sand-100" />

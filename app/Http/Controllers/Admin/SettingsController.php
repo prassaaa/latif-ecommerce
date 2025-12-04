@@ -78,8 +78,8 @@ class SettingsController extends Controller
                 'hero_title' => $settings['hero_title'] ?? 'Desain yang',
                 'hero_title_highlight' => $settings['hero_title_highlight'] ?? 'bernafas.',
                 'hero_description' => $settings['hero_description'] ?? 'Furniture minimalis dari bahan berkelanjutan. Dibuat untuk mereka yang menemukan kemewahan dalam kesederhanaan.',
-                'hero_image_main' => $settings['hero_image_main'] ?? 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=2000&auto=format&fit=crop',
-                'hero_image_secondary' => $settings['hero_image_secondary'] ?? 'https://images.unsplash.com/photo-1567225557594-88d73e55f2cb?q=80&w=600&auto=format&fit=crop',
+                'hero_image_main' => $settings['hero_image_main'] ?? '/images/placeholder-hero.svg',
+                'hero_image_secondary' => $settings['hero_image_secondary'] ?? '/images/placeholder-hero.svg',
                 'hero_product_name' => $settings['hero_product_name'] ?? 'Kursi Santai Premium',
                 // Trust Logos (JSON array)
                 'trust_logos' => $settings['trust_logos'] ?? '["Kompas", "Tempo", "Forbes Indonesia", "Bisnis Indonesia", "The Jakarta Post"]',

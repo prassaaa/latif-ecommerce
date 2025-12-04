@@ -33,7 +33,7 @@ export const CompareDrawer: React.FC = () => {
                                             <X size={14} />
                                         </button>
                                         <div className="aspect-square rounded-lg overflow-hidden mb-2">
-                                            <img src={product.primary_image?.image_url || product.images?.[0]?.image_url || 'https://via.placeholder.com/200'} alt={product.name} className="w-full h-full object-cover" />
+                                            <img src={product.primary_image?.image_url || product.images?.[0]?.image_url || '/images/placeholder-product.svg'} alt={product.name} className="w-full h-full object-cover" />
                                         </div>
                                         <h4 className="text-sm font-medium text-terra-900 line-clamp-2 mb-1">{product.name}</h4>
                                         <p className="text-sm font-bold text-wood-dark">{product.final_price_formatted}</p>

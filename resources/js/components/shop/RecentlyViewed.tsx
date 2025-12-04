@@ -6,6 +6,7 @@ import { ApiProduct } from '@/types/shop';
 
 const STORAGE_KEY = 'recently_viewed_products';
 const MAX_ITEMS = 10;
+const PLACEHOLDER_PRODUCT = '/images/placeholder-product.svg';
 
 export interface RecentlyViewedProduct {
     id: number;
@@ -38,7 +39,7 @@ export function saveToRecentlyViewed(product: ApiProduct) {
             final_price_formatted: product.final_price_formatted,
             has_discount: product.has_discount,
             discount_percentage: product.discount_percentage,
-            image_url: product.primary_image?.image_url || product.images?.[0]?.image_url || '',
+            image_url: product.primary_image?.image_url || product.images?.[0]?.image_url || PLACEHOLDER_PRODUCT,
             average_rating: product.average_rating,
             viewedAt: Date.now(),
         });
@@ -123,10 +124,10 @@ export function RecentlyViewedSection({ excludeProductId, maxItems = 6, classNam
 
                 <div id="recently-viewed-container" className="flex gap-4 overflow-x-auto no-scrollbar scroll-smooth pb-4">
                     {products.map((product, index) => (
-                        <motion.div key={product.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.05 }} className="flex-shrink-0 w-[260px]">
+                        <motion.div key={product.id || `recently-viewed-${index}`} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.05 }} className="flex-shrink-0 w-[260px]">
                             <Link href={`/shop/products/${product.slug}`} className="group block bg-white rounded-2xl overflow-hidden border border-terra-100 hover:shadow-lg transition-all">
                                 <div className="relative aspect-square overflow-hidden">
-                                    <img src={product.image_url || 'https://via.placeholder.com/400'} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                    <img src={product.image_url || '/images/placeholder-product.svg'} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                     {product.has_discount && (
                                         <span className="absolute top-2 left-2 bg-red-500 text-white px-2 py-0.5 rounded-full text-xs font-bold">-{product.discount_percentage}%</span>
                                     )}

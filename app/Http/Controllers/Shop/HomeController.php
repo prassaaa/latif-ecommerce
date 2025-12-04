@@ -56,8 +56,8 @@ class HomeController extends Controller
             'title' => Setting::get('hero_title', 'Desain yang'),
             'title_highlight' => Setting::get('hero_title_highlight', 'bernafas.'),
             'description' => Setting::get('hero_description', 'Furniture minimalis dari bahan berkelanjutan. Dibuat untuk mereka yang menemukan kemewahan dalam kesederhanaan.'),
-            'image_main' => Setting::get('hero_image_main', 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=2000&auto=format&fit=crop'),
-            'image_secondary' => Setting::get('hero_image_secondary', 'https://images.unsplash.com/photo-1567225557594-88d73e55f2cb?q=80&w=600&auto=format&fit=crop'),
+            'image_main' => Setting::get('hero_image_main', '/images/placeholder-hero.svg'),
+            'image_secondary' => Setting::get('hero_image_secondary', '/images/placeholder-hero.svg'),
             'product_name' => Setting::get('hero_product_name', 'Kursi Santai Premium'),
         ];
 

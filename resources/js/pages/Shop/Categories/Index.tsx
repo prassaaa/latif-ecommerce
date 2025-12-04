@@ -9,17 +9,8 @@ interface Props {
     categories: ApiCategory[] | { data: ApiCategory[] };
 }
 
-// Placeholder images untuk kategori
-const CATEGORY_IMAGES: Record<string, string> = {
-    'ruang-tamu': 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800',
-    'ruang-makan': 'https://images.unsplash.com/photo-1533090481720-856c6e3c1fdc?w=800',
-    'kamar-tidur': 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800',
-    'kantor': 'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=800',
-    'outdoor': 'https://images.unsplash.com/photo-1600210492493-0946911123ea?w=800',
-    'dekorasi': 'https://images.unsplash.com/photo-1580480055273-228ff5388ef8?w=800',
-    'pencahayaan': 'https://images.unsplash.com/photo-1507473888900-52ea7556162f?w=800',
-    'default': 'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=800',
-};
+// Placeholder untuk kategori - gunakan gambar dari database
+const PLACEHOLDER_CATEGORY = '/images/placeholder-category.svg';
 
 export default function CategoriesIndex({ categories }: Props) {
     const categoriesList = Array.isArray(categories) ? categories : categories.data;
@@ -72,7 +63,7 @@ interface CategoryCardProps {
 }
 
 function CategoryCard({ category, index }: CategoryCardProps) {
-    const imageUrl = category.image_url || CATEGORY_IMAGES[category.slug] || CATEGORY_IMAGES['default'];
+    const imageUrl = category.image_url || PLACEHOLDER_CATEGORY;
 
     // Make first 2 cards larger on desktop
     const isLarge = index < 2;

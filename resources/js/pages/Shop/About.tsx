@@ -61,7 +61,7 @@ export default function About() {
                         </div>
                         <div className="relative">
                             <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-terra-200">
-                                <img src="https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=800" alt="Workshop" className="w-full h-full object-cover" />
+                                <img src="/images/placeholder-about.svg" alt="Workshop" className="w-full h-full object-cover" />
                             </div>
                             <div className="absolute -bottom-6 -left-6 bg-wood-dark text-white p-6 rounded-2xl">
                                 <div className="text-3xl font-bold">14+</div>

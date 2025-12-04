@@ -1,5 +1,8 @@
 import { Product } from '@/types/shop';
 
+// Placeholder image untuk produk tanpa gambar
+const PLACEHOLDER_PRODUCT = '/images/placeholder-product.svg';
+
 // Data produk furniture Indonesia - akan diganti dengan API nanti
 export const PRODUCTS: Product[] = [
     {
@@ -10,7 +13,7 @@ export const PRODUCTS: Product[] = [
         rating: 4.8,
         description: 'Kursi santai dengan desain modern menggunakan kayu jati pilihan. Dilengkapi dengan bantalan kulit premium untuk kenyamanan maksimal.',
         features: ['Kulit Premium', 'Kayu Jati Solid', 'Ergonomis'],
-        image: 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?q=80&w=1000&auto=format&fit=crop'
+        image: PLACEHOLDER_PRODUCT
     },
     {
         id: '2',
@@ -20,7 +23,7 @@ export const PRODUCTS: Product[] = [
         rating: 4.9,
         description: 'Sofa minimalis dengan desain elegan, menggunakan kain premium anti noda. Cocok untuk ruang tamu modern.',
         features: ['Kaki Kayu Oak', 'Kain Anti Noda', 'Busa High Density'],
-        image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1000&auto=format&fit=crop'
+        image: PLACEHOLDER_PRODUCT
     },
     {
         id: '3',
@@ -30,7 +33,7 @@ export const PRODUCTS: Product[] = [
         rating: 4.7,
         description: 'Meja makan dari kayu jati solid dengan finishing natural. Dapat menampung 6-8 orang dengan nyaman.',
         features: ['Kayu Jati Solid', 'Finishing Natural', 'Dapat Diperpanjang'],
-        image: 'https://images.unsplash.com/photo-1533090481720-856c6e3c1fdc?q=80&w=1000&auto=format&fit=crop'
+        image: PLACEHOLDER_PRODUCT
     },
     {
         id: '4',
@@ -40,7 +43,7 @@ export const PRODUCTS: Product[] = [
         rating: 4.6,
         description: 'Lampu lantai dengan finishing kuningan antik. Memberikan pencahayaan hangat dan elegan untuk setiap sudut ruangan.',
         features: ['Kuningan Antik', 'LED Dimmable', 'Dasar Berat'],
-        image: 'https://images.unsplash.com/photo-1507473888900-52ea7556162f?q=80&w=1000&auto=format&fit=crop'
+        image: PLACEHOLDER_PRODUCT
     },
     {
         id: '5',
@@ -50,7 +53,7 @@ export const PRODUCTS: Product[] = [
         rating: 4.9,
         description: 'Set vas keramik buatan tangan dengan finishing matte. Cocok untuk bunga kering atau sebagai dekorasi standalone.',
         features: ['Buatan Tangan', 'Finishing Matte', 'Set 3 Pcs'],
-        image: 'https://images.unsplash.com/photo-1580480055273-228ff5388ef8?q=80&w=1000&auto=format&fit=crop'
+        image: PLACEHOLDER_PRODUCT
     },
     {
         id: '6',
@@ -60,7 +63,7 @@ export const PRODUCTS: Product[] = [
         rating: 4.5,
         description: 'Karpet tenun tangan dari 100% wol New Zealand. Pola geometris netral yang cocok untuk berbagai gaya interior.',
         features: ['100% Wol', 'Tenun Tangan', 'Pewarna Ramah Lingkungan'],
-        image: 'https://images.unsplash.com/photo-1575414723300-0bcb02ca4556?q=80&w=1000&auto=format&fit=crop'
+        image: PLACEHOLDER_PRODUCT
     }
 ];
 

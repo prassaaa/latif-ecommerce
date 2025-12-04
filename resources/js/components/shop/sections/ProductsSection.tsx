@@ -2,6 +2,9 @@ import { Link } from '@inertiajs/react';
 import { ShoppingBag, Star, ArrowRight } from 'lucide-react';
 import { Product, ApiProduct } from '@/types/shop';
 
+// Placeholder untuk produk tanpa gambar
+const PLACEHOLDER_PRODUCT = '/images/placeholder-product.svg';
+
 interface ProductsSectionProps {
     products: ApiProduct[];
     onProductClick: (product: Product) => void;
@@ -15,8 +18,8 @@ const convertToProduct = (apiProduct: ApiProduct): Product => ({
     category: apiProduct.category?.name || '',
     description: apiProduct.description || '',
     features: apiProduct.specifications ? Object.values(apiProduct.specifications) : [],
-    image: apiProduct.primary_image?.image_url || apiProduct.images?.[0]?.image_url || '',
-    rating: apiProduct.average_rating,
+    image: apiProduct.primary_image?.image_url || apiProduct.images?.[0]?.image_url || PLACEHOLDER_PRODUCT,
+    rating: Number(apiProduct.average_rating) || 0,
 });
 
 export const ProductsSection: React.FC<ProductsSectionProps> = ({ products, onProductClick }) => {
@@ -47,7 +50,7 @@ export const ProductsSection: React.FC<ProductsSectionProps> = ({ products, onPr
                             >
                                 <div className="aspect-[4/5] bg-terra-100 rounded-3xl overflow-hidden mb-5 relative">
                                     <img
-                                        src={apiProduct.primary_image?.image_url || apiProduct.images?.[0]?.image_url || ''}
+                                        src={apiProduct.primary_image?.image_url || apiProduct.images?.[0]?.image_url || PLACEHOLDER_PRODUCT}
                                         alt={apiProduct.name}
                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                                     />
@@ -71,7 +74,7 @@ export const ProductsSection: React.FC<ProductsSectionProps> = ({ products, onPr
                                     </div>
                                     <div className="flex items-center gap-1">
                                         <Star size={14} className="text-yellow-500 fill-yellow-500" />
-                                        <span className="text-sm text-terra-500">{apiProduct.average_rating.toFixed(1)}</span>
+                                        <span className="text-sm text-terra-500">{Number(apiProduct.average_rating || 0).toFixed(1)}</span>
                                     </div>
                                 </div>
                             </div>

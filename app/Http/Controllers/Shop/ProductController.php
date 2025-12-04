@@ -61,13 +61,13 @@ class ProductController extends Controller
         $relatedProducts = Product::active()
             ->where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
-            ->with('images')
+            ->with(['images', 'category'])
             ->limit(4)
             ->get();
 
         return Inertia::render('Shop/Products/Show', [
-            'product' => new ProductResource($product),
-            'relatedProducts' => ProductResource::collection($relatedProducts),
+            'product' => (new ProductResource($product))->resolve(),
+            'relatedProducts' => ProductResource::collection($relatedProducts)->resolve(),
         ]);
     }
 

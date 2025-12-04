@@ -82,7 +82,7 @@ export default function ProductsIndex({ products, categories, currentCategory, f
     // SEO Data
     const pageTitle = currentCategory ? currentCategory.name : 'Semua Produk';
     const pageDescription = currentCategory
-        ? `Koleksi ${currentCategory.name} berkualitas tinggi di Latif Living. Temukan berbagai pilihan ${currentCategory.name.toLowerCase()} dengan harga terbaik.`
+        ? `Koleksi ${currentCategory.name} berkualitas tinggi di Latif Living. Temukan berbagai pilihan ${currentCategory.name?.toLowerCase() || ''} dengan harga terbaik.`
         : 'Jelajahi koleksi lengkap furnitur berkualitas di Latif Living. Kursi, meja, lemari, dan berbagai furnitur lainnya dengan harga terjangkau.';
     const breadcrumbItems = [
         { name: 'Beranda', url: typeof window !== 'undefined' ? `${window.location.origin}/shop` : '/shop' },
@@ -341,7 +341,7 @@ interface ProductCardProps {
 function ProductCard({ product, viewMode, index, onQuickView }: ProductCardProps) {
     const imageUrl = product.primary_image?.image_url
         || product.images?.[0]?.image_url
-        || 'https://via.placeholder.com/400x400?text=No+Image';
+        || '/images/placeholder-product.svg';
 
     if (viewMode === 'list') {
         return (

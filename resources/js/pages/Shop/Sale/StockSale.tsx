@@ -140,7 +140,7 @@ export default function StockSale({ products, categories, filters }: Props) {
 }
 
 function ProductCard({ product }: { product: ApiProduct }) {
-    const imageUrl = product.primary_image?.image_url || product.images?.[0]?.image_url || 'https://via.placeholder.com/400';
+    const imageUrl = product.primary_image?.image_url || product.images?.[0]?.image_url || '/images/placeholder-product.svg';
     return (
         <Link href={`/shop/products/${product.slug}`} className="group bg-white rounded-2xl overflow-hidden border border-terra-100 hover:shadow-lg transition-all">
             <div className="relative aspect-square overflow-hidden">

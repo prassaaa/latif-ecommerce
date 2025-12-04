@@ -76,7 +76,7 @@ export default function Compare({ products }: Props) {
                                             <X size={16} />
                                         </button>
                                         <div className="aspect-square rounded-xl overflow-hidden mb-3 bg-sand-50">
-                                            <img src={product.primary_image?.image_url || product.images?.[0]?.image_url || 'https://via.placeholder.com/300'} alt={product.name} className="w-full h-full object-cover" />
+                                            <img src={product.primary_image?.image_url || product.images?.[0]?.image_url || '/images/placeholder-product.svg'} alt={product.name} className="w-full h-full object-cover" />
                                         </div>
                                         <Link href={`/shop/products/${product.slug}`} className="font-medium text-terra-900 hover:text-wood line-clamp-2">{product.name}</Link>
                                         <p className="text-sm text-terra-500 mt-1">{product.category?.name}</p>

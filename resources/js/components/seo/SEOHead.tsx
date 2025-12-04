@@ -56,7 +56,8 @@ export const SEOHead: React.FC<SEOProps> = ({
     nofollow = false,
     canonical,
 }) => {
-    const fullTitle = title.includes(siteName) ? title : `${title} | ${siteName}`;
+    const safeTitle = title || 'Latif Living';
+    const fullTitle = safeTitle.includes(siteName) ? safeTitle : `${safeTitle} | ${siteName}`;
     const currentUrl = url || (typeof window !== 'undefined' ? window.location.href : '');
     const imageUrl = image?.startsWith('http') ? image : (typeof window !== 'undefined' ? `${window.location.origin}${image}` : image);
     
@@ -92,24 +93,16 @@ export const SEOHead: React.FC<SEOProps> = ({
             <meta name="twitter:image" content={imageUrl} />
             
             {/* Product specific Open Graph */}
-            {product && (
-                <>
-                    {product.price && <meta property="product:price:amount" content={String(product.price)} />}
-                    {product.currency && <meta property="product:price:currency" content={product.currency} />}
-                    {product.availability && <meta property="product:availability" content={product.availability} />}
-                    {product.brand && <meta property="product:brand" content={product.brand} />}
-                    {product.category && <meta property="product:category" content={product.category} />}
-                </>
-            )}
+            {product && product.price && <meta property="product:price:amount" content={String(product.price)} key="product-price" />}
+            {product && product.currency && <meta property="product:price:currency" content={product.currency} key="product-currency" />}
+            {product && product.availability && <meta property="product:availability" content={product.availability} key="product-availability" />}
+            {product && product.brand && <meta property="product:brand" content={product.brand} key="product-brand" />}
+            {product && product.category && <meta property="product:category" content={product.category} key="product-category" />}
             
             {/* Article specific Open Graph */}
-            {article && (
-                <>
-                    {article.publishedTime && <meta property="article:published_time" content={article.publishedTime} />}
-                    {article.modifiedTime && <meta property="article:modified_time" content={article.modifiedTime} />}
-                    {article.author && <meta property="article:author" content={article.author} />}
-                </>
-            )}
+            {article && article.publishedTime && <meta property="article:published_time" content={article.publishedTime} key="article-published" />}
+            {article && article.modifiedTime && <meta property="article:modified_time" content={article.modifiedTime} key="article-modified" />}
+            {article && article.author && <meta property="article:author" content={article.author} key="article-author" />}
         </Head>
     );
 };
