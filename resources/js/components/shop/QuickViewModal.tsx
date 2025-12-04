@@ -60,10 +60,10 @@ export const QuickViewModal: React.FC<QuickViewModalProps> = ({ product, isOpen,
                             {/* Info Section */}
                             <div className="p-6 md:p-8 flex flex-col max-h-[90vh] md:max-h-none overflow-y-auto">
                                 <button onClick={onClose} className="absolute top-4 right-4 w-10 h-10 bg-terra-100 hover:bg-terra-200 rounded-full flex items-center justify-center transition-colors"><X size={20} /></button>
-                                
+
                                 <p className="text-sm text-wood uppercase tracking-wider mb-2">{product.category?.name}</p>
                                 <h2 className="font-serif text-2xl md:text-3xl text-terra-900 mb-3">{product.name}</h2>
-                                
+
                                 <div className="flex items-center gap-3 mb-4">
                                     <div className="flex">{[1,2,3,4,5].map(s => <Star key={s} size={16} className={s <= Math.round(product.average_rating) ? 'fill-yellow-400 text-yellow-400' : 'text-terra-200'} />)}</div>
                                     <span className="text-sm text-terra-500">({product.review_count} ulasan)</span>

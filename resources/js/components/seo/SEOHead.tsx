@@ -60,7 +60,7 @@ export const SEOHead: React.FC<SEOProps> = ({
     const fullTitle = safeTitle.includes(siteName) ? safeTitle : `${safeTitle} | ${siteName}`;
     const currentUrl = url || (typeof window !== 'undefined' ? window.location.href : '');
     const imageUrl = image?.startsWith('http') ? image : (typeof window !== 'undefined' ? `${window.location.origin}${image}` : image);
-    
+
     const robotsContent = [
         noindex ? 'noindex' : 'index',
         nofollow ? 'nofollow' : 'follow',
@@ -72,10 +72,10 @@ export const SEOHead: React.FC<SEOProps> = ({
             <meta name="description" content={description} />
             <meta name="keywords" content={keywords.join(', ')} />
             <meta name="robots" content={robotsContent} />
-            
+
             {/* Canonical URL */}
             {canonical && <link rel="canonical" href={canonical} />}
-            
+
             {/* Open Graph / Facebook */}
             <meta property="og:type" content={type} />
             <meta property="og:url" content={currentUrl} />
@@ -84,21 +84,21 @@ export const SEOHead: React.FC<SEOProps> = ({
             <meta property="og:image" content={imageUrl} />
             <meta property="og:site_name" content={siteName} />
             <meta property="og:locale" content={locale} />
-            
+
             {/* Twitter Card */}
             <meta name="twitter:card" content={twitterCard} />
             <meta name="twitter:site" content={twitterSite} />
             <meta name="twitter:title" content={fullTitle} />
             <meta name="twitter:description" content={description} />
             <meta name="twitter:image" content={imageUrl} />
-            
+
             {/* Product specific Open Graph */}
             {product && product.price && <meta property="product:price:amount" content={String(product.price)} key="product-price" />}
             {product && product.currency && <meta property="product:price:currency" content={product.currency} key="product-currency" />}
             {product && product.availability && <meta property="product:availability" content={product.availability} key="product-availability" />}
             {product && product.brand && <meta property="product:brand" content={product.brand} key="product-brand" />}
             {product && product.category && <meta property="product:category" content={product.category} key="product-category" />}
-            
+
             {/* Article specific Open Graph */}
             {article && article.publishedTime && <meta property="article:published_time" content={article.publishedTime} key="article-published" />}
             {article && article.modifiedTime && <meta property="article:modified_time" content={article.modifiedTime} key="article-modified" />}
