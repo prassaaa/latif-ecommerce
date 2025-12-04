@@ -46,10 +46,21 @@ interface Props {
 }
 
 export default function CheckoutIndex({ cart, addresses, paymentMethods }: Props) {
+    // Ensure addresses is always an array
+    const addressList = Array.isArray(addresses) ? addresses : [];
+    const paymentList = Array.isArray(paymentMethods) ? paymentMethods : [];
+
+    // Ensure cart has items array
+    const safeCart: Cart = {
+        items_count: cart?.items_count || 0,
+        subtotal_formatted: cart?.subtotal_formatted || 'Rp 0',
+        items: Array.isArray(cart?.items) ? cart.items : [],
+    };
+
     const [selectedAddress, setSelectedAddress] = useState<number | null>(
-        addresses.find(a => a.is_default)?.id || addresses[0]?.id || null
+        addressList.find(a => a.is_default)?.id || addressList[0]?.id || null
     );
-    const [selectedPayment, setSelectedPayment] = useState<string>(paymentMethods[0]?.value || '');
+    const [selectedPayment, setSelectedPayment] = useState<string>(paymentList[0]?.value || '');
 
     const { processing } = useForm({});
 
@@ -97,9 +108,9 @@ export default function CheckoutIndex({ cart, addresses, paymentMethods }: Props
                                             <Plus className="w-4 h-4" /> Tambah Alamat
                                         </Link>
                                     </div>
-                                    {addresses.length > 0 ? (
+                                    {addressList.length > 0 ? (
                                         <div className="space-y-3">
-                                            {addresses.map((addr) => (
+                                            {addressList.map((addr) => (
                                                 <label key={addr.id} className={`block p-4 border-2 rounded-xl cursor-pointer transition-colors ${selectedAddress === addr.id ? 'border-wood bg-wood/5' : 'border-terra-100 hover:border-terra-200'}`}>
                                                     <div className="flex items-start gap-3">
                                                         <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 ${selectedAddress === addr.id ? 'border-wood bg-wood' : 'border-terra-300'}`}>
@@ -130,11 +141,11 @@ export default function CheckoutIndex({ cart, addresses, paymentMethods }: Props
                                 </div>
 
                                 {/* Payment Method */}
-                                <PaymentSection paymentMethods={paymentMethods} selectedPayment={selectedPayment} setSelectedPayment={setSelectedPayment} />
+                                <PaymentSection paymentMethods={paymentList} selectedPayment={selectedPayment} setSelectedPayment={setSelectedPayment} />
                             </div>
 
                             {/* Order Summary */}
-                            <OrderSummary cart={cart} getProductImage={getProductImage} processing={processing} selectedAddress={selectedAddress} selectedPayment={selectedPayment} />
+                            <OrderSummary cart={safeCart} getProductImage={getProductImage} processing={processing} selectedAddress={selectedAddress} selectedPayment={selectedPayment} />
                         </div>
                     </form>
                 </div>

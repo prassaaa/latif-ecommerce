@@ -16,20 +16,19 @@ export default function WishlistIndex({ products: initialProducts }: Props) {
 
     const handleRemove = async (productId: number) => {
         setRemovingId(productId);
-        try {
-            await fetch(`/shop/wishlist/${productId}`, {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
-                    'Accept': 'application/json',
-                },
-            });
-            setProducts(products.filter(p => p.id !== productId));
-        } catch (error) {
-            console.error('Failed to remove from wishlist:', error);
-        } finally {
-            setRemovingId(null);
-        }
+
+        router.delete(`/shop/wishlist/${productId}`, {
+            preserveScroll: true,
+            onSuccess: () => {
+                setProducts(products.filter(p => p.id !== productId));
+            },
+            onError: (error) => {
+                console.error('Failed to remove from wishlist:', error);
+            },
+            onFinish: () => {
+                setRemovingId(null);
+            },
+        });
     };
 
     return (

@@ -48,8 +48,8 @@ class CheckoutController extends Controller implements HasMiddleware
         $addresses = $user->addresses()->orderByDesc('is_default')->get();
 
         return Inertia::render('Shop/Checkout/Index', [
-            'cart' => new CartResource($cart),
-            'addresses' => AddressResource::collection($addresses),
+            'cart' => (new CartResource($cart))->resolve(),
+            'addresses' => AddressResource::collection($addresses)->resolve(),
             'paymentMethods' => collect(PaymentMethod::cases())->map(fn ($method) => [
                 'value' => $method->value,
                 'name' => $method->label(),

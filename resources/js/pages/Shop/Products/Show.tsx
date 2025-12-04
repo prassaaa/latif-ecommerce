@@ -45,29 +45,21 @@ export default function ProductShow({ product, relatedProducts }: Props) {
     const handleAddToCart = async () => {
         setIsAddingToCart(true);
         setCartMessage(null);
-        try {
-            const response = await fetch('/shop/cart', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
-                    'Accept': 'application/json',
-                },
-                body: JSON.stringify({ product_id: product.id, quantity }),
-            });
-            const data = await response.json();
-            if (response.ok) {
-                setCartMessage({ type: 'success', text: data.message || 'Produk berhasil ditambahkan ke keranjang!' });
-                router.reload({ only: ['cart'] });
-            } else {
-                setCartMessage({ type: 'error', text: data.message || 'Gagal menambahkan produk ke keranjang' });
-            }
-        } catch (e) {
-            console.error('Error adding to cart:', e);
-            setCartMessage({ type: 'error', text: 'Terjadi kesalahan. Silakan coba lagi.' });
-        } finally {
-            setIsAddingToCart(false);
-        }
+
+        router.post('/shop/cart', { product_id: product.id, quantity }, {
+            preserveScroll: true,
+            only: ['cart'],
+            onSuccess: () => {
+                setCartMessage({ type: 'success', text: 'Produk berhasil ditambahkan ke keranjang!' });
+            },
+            onError: (errors) => {
+                console.error('Error adding to cart:', errors);
+                setCartMessage({ type: 'error', text: 'Gagal menambahkan produk ke keranjang' });
+            },
+            onFinish: () => {
+                setIsAddingToCart(false);
+            },
+        });
     };
 
     // SEO Data

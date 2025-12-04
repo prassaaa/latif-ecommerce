@@ -24,28 +24,21 @@ export default function Compare({ products }: Props) {
 
     const handleAddToCart = async (productId: number) => {
         setAddingToCart(productId);
-        try {
-            const response = await fetch('/shop/cart', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
-                    'Accept': 'application/json',
-                },
-                body: JSON.stringify({ product_id: productId, quantity: 1 }),
-            });
-            if (response.ok) {
+
+        router.post('/shop/cart', { product_id: productId, quantity: 1 }, {
+            preserveScroll: true,
+            only: ['cart'],
+            onSuccess: () => {
                 setCartSuccess(productId);
-                setTimeout(() => {
-                    setCartSuccess(null);
-                    router.reload({ only: ['cart'] });
-                }, 1500);
-            }
-        } catch (e) {
-            console.error('Error adding to cart:', e);
-        } finally {
-            setAddingToCart(null);
-        }
+                setTimeout(() => setCartSuccess(null), 1500);
+            },
+            onError: (errors) => {
+                console.error('Error adding to cart:', errors);
+            },
+            onFinish: () => {
+                setAddingToCart(null);
+            },
+        });
     };
 
     // Collect all unique specs from products

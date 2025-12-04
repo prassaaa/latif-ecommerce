@@ -23,42 +23,36 @@ export const QuickViewModal: React.FC<QuickViewModalProps> = ({ product, isOpen,
 
     const handleAddToCart = async () => {
         setIsAddingToCart(true);
-        try {
-            const response = await fetch('/shop/cart', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
-                    'Accept': 'application/json',
-                },
-                body: JSON.stringify({ product_id: product.id, quantity }),
-            });
-            if (response.ok) {
+
+        router.post('/shop/cart', { product_id: product.id, quantity }, {
+            preserveScroll: true,
+            only: ['cart'],
+            onSuccess: () => {
                 setCartSuccess(true);
                 // Show success briefly then close
                 setTimeout(() => {
                     onClose();
                     setCartSuccess(false);
                     setQuantity(1);
-                    // Refresh page to update cart count
-                    router.reload({ only: ['cart'] });
                 }, 800);
-            }
-        } catch (e) {
-            console.error('Error adding to cart:', e);
-        } finally {
-            setIsAddingToCart(false);
-        }
+            },
+            onError: (errors) => {
+                console.error('Error adding to cart:', errors);
+            },
+            onFinish: () => {
+                setIsAddingToCart(false);
+            },
+        });
     };
 
     const handleWishlist = async () => {
-        try {
-            await fetch(`/shop/wishlist/${product.id}`, {
-                method: 'POST',
-                headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '', 'Accept': 'application/json' },
-            });
-            setIsWishlisted(!isWishlisted);
-        } catch (e) { console.error(e); }
+        router.post(`/shop/wishlist/${product.id}`, {}, {
+            preserveScroll: true,
+            onSuccess: () => {
+                setIsWishlisted(!isWishlisted);
+            },
+            onError: (e) => console.error(e),
+        });
     };
 
     const nextImage = () => setCurrentImageIndex((prev) => (prev + 1) % images.length);

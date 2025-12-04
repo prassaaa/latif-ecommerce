@@ -65,47 +65,29 @@ export function ShopLayout({
         if (newQuantity < 1) return;
         setUpdatingItem(itemId);
 
-        try {
-            const response = await fetch(`/shop/cart/${itemId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
-                    'Accept': 'application/json',
-                },
-                body: JSON.stringify({ quantity: newQuantity }),
-            });
-
-            if (response.ok) {
-                router.reload({ only: ['cart'] });
-            }
-        } catch (e) {
-            console.error('Error updating cart:', e);
-        } finally {
-            setUpdatingItem(null);
-        }
+        router.put(`/shop/cart/${itemId}`, { quantity: newQuantity }, {
+            preserveScroll: true,
+            only: ['cart'],
+            onFinish: () => setUpdatingItem(null),
+            onError: (errors) => {
+                console.error('Error updating cart:', errors);
+                setUpdatingItem(null);
+            },
+        });
     };
 
     const handleRemoveItem = async (itemId: number) => {
         setUpdatingItem(itemId);
 
-        try {
-            const response = await fetch(`/shop/cart/${itemId}`, {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
-                    'Accept': 'application/json',
-                },
-            });
-
-            if (response.ok) {
-                router.reload({ only: ['cart'] });
-            }
-        } catch (e) {
-            console.error('Error removing item:', e);
-        } finally {
-            setUpdatingItem(null);
-        }
+        router.delete(`/shop/cart/${itemId}`, {
+            preserveScroll: true,
+            only: ['cart'],
+            onFinish: () => setUpdatingItem(null),
+            onError: (errors) => {
+                console.error('Error removing item:', errors);
+                setUpdatingItem(null);
+            },
+        });
     };
 
     const handleCheckout = () => {
