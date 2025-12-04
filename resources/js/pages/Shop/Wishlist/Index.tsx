@@ -1,7 +1,7 @@
 import { Link, router } from '@inertiajs/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, ShoppingBag, Trash2, ArrowRight } from 'lucide-react';
-import { Header, Footer } from '@/components/shop';
+import { ShopLayout } from '@/layouts/ShopLayout';
 import { SEOHead } from '@/components/seo';
 import { ApiProduct } from '@/types/shop';
 import { useState } from 'react';
@@ -40,8 +40,7 @@ export default function WishlistIndex({ products: initialProducts }: Props) {
                 noindex={true}
             />
             <div className="bg-noise" />
-            <Header cartCount={0} onCartClick={() => {}} onLogoClick={() => router.visit('/shop')} />
-
+            <ShopLayout>
             <main className="min-h-screen bg-white pt-28 pb-20">
                 <div className="max-w-[1400px] mx-auto px-6 md:px-12">
                     {/* Header */}
@@ -75,8 +74,7 @@ export default function WishlistIndex({ products: initialProducts }: Props) {
                     )}
                 </div>
             </main>
-
-            <Footer />
+            </ShopLayout>
         </>
     );
 }

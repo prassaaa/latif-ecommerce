@@ -1,6 +1,6 @@
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { CheckCircle, Package, ArrowRight, Home } from 'lucide-react';
-import { Header, Footer } from '@/components/shop';
+import { ShopLayout } from '@/layouts/ShopLayout';
 import { motion } from 'framer-motion';
 
 interface Order {
@@ -26,8 +26,7 @@ export default function CheckoutSuccess({ order }: Props) {
         <>
             <Head title="Pesanan Berhasil - Latif Living" />
             <div className="bg-noise" />
-            <Header cartCount={0} onCartClick={() => {}} onLogoClick={() => router.visit('/shop')} />
-
+            <ShopLayout>
             <main className="min-h-screen bg-sand-50 pt-28 pb-20">
                 <div className="max-w-2xl mx-auto px-6 md:px-12">
                     <motion.div
@@ -112,8 +111,7 @@ export default function CheckoutSuccess({ order }: Props) {
                     </div>
                 </div>
             </main>
-
-            <Footer />
+            </ShopLayout>
         </>
     );
 }

@@ -1,7 +1,8 @@
 import { Link, router } from '@inertiajs/react';
 import { Flame, Filter, ChevronDown, Star } from 'lucide-react';
 import { useState } from 'react';
-import { Header, Footer, FlashSaleCountdown, WhatsAppButton } from '@/components/shop';
+import { FlashSaleCountdown } from '@/components/shop';
+import { ShopLayout } from '@/layouts/ShopLayout';
 import { SEOHead } from '@/components/seo';
 import { ApiProduct, ApiCategory, PaginatedResponse } from '@/types/shop';
 
@@ -40,8 +41,7 @@ export default function HotSale({ products, categories, filters }: Props) {
                 keywords={['hot sale', 'diskon furnitur', 'promo mebel', 'sale latif living', 'furnitur murah']}
             />
             <div className="bg-noise" />
-            <Header cartCount={0} onCartClick={() => {}} onLogoClick={() => router.visit('/shop')} />
-
+            <ShopLayout>
             <main className="min-h-screen bg-sand-50 pt-28 pb-20">
                 {/* Hero Banner */}
                 <div className="bg-gradient-to-r from-terra-800 to-wood-dark text-white py-16 mb-12">
@@ -128,9 +128,7 @@ export default function HotSale({ products, categories, filters }: Props) {
                     )}
                 </div>
             </main>
-
-            <Footer />
-            <WhatsAppButton phoneNumber="6281234567890" message="Halo, saya tertarik dengan produk Hot Sale di Latif Living" />
+            </ShopLayout>
         </>
     );
 }

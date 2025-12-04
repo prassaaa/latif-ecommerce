@@ -1,6 +1,6 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { ShoppingBag, Minus, Plus, Trash2, ArrowRight, Bookmark, ShoppingCart } from 'lucide-react';
-import { Header, Footer } from '@/components/shop';
+import { ShopLayout } from '@/layouts/ShopLayout';
 import { useState } from 'react';
 
 interface ProductImage {
@@ -87,8 +87,7 @@ export default function CartIndex({ cart }: Props) {
         <>
             <Head title="Keranjang Belanja - Latif Living" />
             <div className="bg-noise" />
-            <Header cartCount={cart?.items_count || 0} onCartClick={() => {}} onLogoClick={() => router.visit('/shop')} />
-
+            <ShopLayout>
             <main className="min-h-screen bg-sand-50 pt-28 pb-20">
                 <div className="max-w-6xl mx-auto px-6 md:px-12">
                     <h1 className="font-serif text-3xl text-terra-900 mb-8">Keranjang Belanja</h1>
@@ -162,8 +161,7 @@ export default function CartIndex({ cart }: Props) {
                     )}
                 </div>
             </main>
-
-            <Footer />
+            </ShopLayout>
         </>
     );
 }

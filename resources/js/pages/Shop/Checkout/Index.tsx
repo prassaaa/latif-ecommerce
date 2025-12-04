@@ -1,6 +1,6 @@
 import { Head, Link, router, useForm } from '@inertiajs/react';
 import { MapPin, CreditCard, Truck, Plus, Check, ArrowLeft, Loader2 } from 'lucide-react';
-import { Header, Footer } from '@/components/shop';
+import { ShopLayout } from '@/layouts/ShopLayout';
 import { useState } from 'react';
 
 interface Address {
@@ -75,8 +75,7 @@ export default function CheckoutIndex({ cart, addresses, paymentMethods }: Props
         <>
             <Head title="Checkout - Latif Living" />
             <div className="bg-noise" />
-            <Header cartCount={cart.items_count} onCartClick={() => {}} onLogoClick={() => router.visit('/shop')} />
-
+            <ShopLayout>
             <main className="min-h-screen bg-sand-50 pt-28 pb-20">
                 <div className="max-w-6xl mx-auto px-6 md:px-12">
                     <Link href="/shop/cart" className="inline-flex items-center gap-2 text-terra-600 hover:text-terra-900 mb-6">
@@ -140,8 +139,7 @@ export default function CheckoutIndex({ cart, addresses, paymentMethods }: Props
                     </form>
                 </div>
             </main>
-
-            <Footer />
+            </ShopLayout>
         </>
     );
 }

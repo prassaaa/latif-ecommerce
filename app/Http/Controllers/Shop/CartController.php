@@ -17,6 +17,7 @@ use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -29,11 +30,11 @@ class CartController extends Controller
         $cart?->load('items.product.images');
 
         return Inertia::render('Shop/Cart/Index', [
-            'cart' => $cart ? new CartResource($cart) : null,
+            'cart' => $cart ? (new CartResource($cart))->resolve() : null,
         ]);
     }
 
-    public function store(AddToCartRequest $request, AddToCartAction $action): JsonResponse
+    public function store(AddToCartRequest $request, AddToCartAction $action): JsonResponse|RedirectResponse
     {
         $validated = $request->validated();
 
@@ -49,41 +50,53 @@ class CartController extends Controller
 
         $cart = $cartItem->cart->load('items.product.images');
 
-        return response()->json([
-            'message' => 'Produk berhasil ditambahkan ke keranjang.',
-            'cart' => new CartResource($cart),
-        ]);
+        if ($request->wantsJson()) {
+            return response()->json([
+                'message' => 'Produk berhasil ditambahkan ke keranjang.',
+                'cart' => (new CartResource($cart))->resolve(),
+            ]);
+        }
+
+        return back()->with('success', 'Produk berhasil ditambahkan ke keranjang.');
     }
 
     public function update(
         UpdateCartItemRequest $request,
         CartItem $cartItem,
         UpdateCartItemAction $action
-    ): JsonResponse {
+    ): JsonResponse|RedirectResponse {
         $action->execute($cartItem, (int) $request->validated('quantity'));
 
         $cart = $cartItem->cart->fresh()->load('items.product.images');
 
-        return response()->json([
-            'message' => 'Keranjang berhasil diperbarui.',
-            'cart' => new CartResource($cart),
-        ]);
+        if ($request->wantsJson()) {
+            return response()->json([
+                'message' => 'Keranjang berhasil diperbarui.',
+                'cart' => (new CartResource($cart))->resolve(),
+            ]);
+        }
+
+        return back()->with('success', 'Keranjang berhasil diperbarui.');
     }
 
-    public function destroy(CartItem $cartItem, RemoveFromCartAction $action): JsonResponse
+    public function destroy(Request $request, CartItem $cartItem, RemoveFromCartAction $action): JsonResponse|RedirectResponse
     {
         $cart = $cartItem->cart;
         $action->execute($cartItem);
 
-        $cart = $cart->fresh()->load('items.product.images');
+        $cart = $cart->fresh()?->load('items.product.images');
 
-        return response()->json([
-            'message' => 'Produk berhasil dihapus dari keranjang.',
-            'cart' => new CartResource($cart),
-        ]);
+        if ($request->wantsJson()) {
+            return response()->json([
+                'message' => 'Produk berhasil dihapus dari keranjang.',
+                'cart' => $cart ? (new CartResource($cart))->resolve() : null,
+            ]);
+        }
+
+        return back()->with('success', 'Produk berhasil dihapus dari keranjang.');
     }
 
-    public function clear(Request $request, ClearCartAction $action): JsonResponse
+    public function clear(Request $request, ClearCartAction $action): JsonResponse|RedirectResponse
     {
         $cart = $this->getCart($request);
 
@@ -91,49 +104,68 @@ class CartController extends Controller
             $action->execute($cart);
         }
 
-        return response()->json([
-            'message' => 'Keranjang berhasil dikosongkan.',
-        ]);
+        if ($request->wantsJson()) {
+            return response()->json([
+                'message' => 'Keranjang berhasil dikosongkan.',
+            ]);
+        }
+
+        return back()->with('success', 'Keranjang berhasil dikosongkan.');
     }
 
-    public function merge(Request $request, MergeCartsAction $action): JsonResponse
+    public function merge(Request $request, MergeCartsAction $action): JsonResponse|RedirectResponse
     {
         $user = $request->user();
 
         if (! $user) {
-            return response()->json(['message' => 'Unauthorized'], 401);
+            if ($request->wantsJson()) {
+                return response()->json(['message' => 'Unauthorized'], 401);
+            }
+            return back()->with('error', 'Unauthorized');
         }
 
         $cart = $action->execute($user, $request->session()->getId());
 
-        return response()->json([
-            'message' => 'Keranjang berhasil digabungkan.',
-            'cart' => new CartResource($cart),
-        ]);
+        if ($request->wantsJson()) {
+            return response()->json([
+                'message' => 'Keranjang berhasil digabungkan.',
+                'cart' => (new CartResource($cart))->resolve(),
+            ]);
+        }
+
+        return back()->with('success', 'Keranjang berhasil digabungkan.');
     }
 
-    public function saveForLater(CartItem $cartItem): JsonResponse
+    public function saveForLater(Request $request, CartItem $cartItem): JsonResponse|RedirectResponse
     {
         $cartItem->update(['is_saved_for_later' => true]);
 
         $cart = $cartItem->cart->fresh()->load('items.product.images');
 
-        return response()->json([
-            'message' => 'Produk disimpan untuk nanti.',
-            'cart' => new CartResource($cart),
-        ]);
+        if ($request->wantsJson()) {
+            return response()->json([
+                'message' => 'Produk disimpan untuk nanti.',
+                'cart' => (new CartResource($cart))->resolve(),
+            ]);
+        }
+
+        return back()->with('success', 'Produk disimpan untuk nanti.');
     }
 
-    public function moveToCart(CartItem $cartItem): JsonResponse
+    public function moveToCart(Request $request, CartItem $cartItem): JsonResponse|RedirectResponse
     {
         $cartItem->update(['is_saved_for_later' => false]);
 
         $cart = $cartItem->cart->fresh()->load('items.product.images');
 
-        return response()->json([
-            'message' => 'Produk dipindahkan ke keranjang.',
-            'cart' => new CartResource($cart),
-        ]);
+        if ($request->wantsJson()) {
+            return response()->json([
+                'message' => 'Produk dipindahkan ke keranjang.',
+                'cart' => (new CartResource($cart))->resolve(),
+            ]);
+        }
+
+        return back()->with('success', 'Produk dipindahkan ke keranjang.');
     }
 
     private function getCart(Request $request): ?Cart

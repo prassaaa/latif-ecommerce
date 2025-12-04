@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, router } from '@inertiajs/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Star, ShoppingBag, Heart, Minus, Plus, ChevronLeft, ChevronRight, Eye } from 'lucide-react';
+import { X, Star, ShoppingBag, Heart, Minus, Plus, ChevronLeft, ChevronRight, Eye, Loader2, Check } from 'lucide-react';
 import { ApiProduct } from '@/types/shop';
 
 interface QuickViewModalProps {
@@ -14,13 +14,41 @@ export const QuickViewModal: React.FC<QuickViewModalProps> = ({ product, isOpen,
     const [quantity, setQuantity] = useState(1);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [isWishlisted, setIsWishlisted] = useState(false);
+    const [isAddingToCart, setIsAddingToCart] = useState(false);
+    const [cartSuccess, setCartSuccess] = useState(false);
 
     if (!product) return null;
 
     const images = product.images?.length ? product.images : [{ id: 0, image_url: product.primary_image?.image_url || '/images/placeholder-product.svg', alt_text: product.name }];
 
-    const handleAddToCart = () => {
-        router.post('/shop/cart', { product_id: product.id, quantity }, { preserveScroll: true, onSuccess: () => onClose() });
+    const handleAddToCart = async () => {
+        setIsAddingToCart(true);
+        try {
+            const response = await fetch('/shop/cart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ product_id: product.id, quantity }),
+            });
+            if (response.ok) {
+                setCartSuccess(true);
+                // Show success briefly then close
+                setTimeout(() => {
+                    onClose();
+                    setCartSuccess(false);
+                    setQuantity(1);
+                    // Refresh page to update cart count
+                    router.reload({ only: ['cart'] });
+                }, 800);
+            }
+        } catch (e) {
+            console.error('Error adding to cart:', e);
+        } finally {
+            setIsAddingToCart(false);
+        }
     };
 
     const handleWishlist = async () => {
@@ -100,8 +128,31 @@ export const QuickViewModal: React.FC<QuickViewModalProps> = ({ product, isOpen,
 
                                 {/* Actions */}
                                 <div className="flex gap-3 mt-auto">
-                                    <button onClick={handleAddToCart} disabled={!product.is_in_stock} className="flex-1 bg-terra-900 text-white py-3 rounded-full font-medium hover:bg-wood-dark transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
-                                        <ShoppingBag size={20} />Tambah ke Keranjang
+                                    <button
+                                        onClick={handleAddToCart}
+                                        disabled={!product.is_in_stock || isAddingToCart || cartSuccess}
+                                        className={`flex-1 py-3 rounded-full font-medium transition-colors flex items-center justify-center gap-2 disabled:cursor-not-allowed ${
+                                            cartSuccess
+                                                ? 'bg-green-500 text-white'
+                                                : 'bg-terra-900 text-white hover:bg-wood-dark disabled:opacity-50'
+                                        }`}
+                                    >
+                                        {cartSuccess ? (
+                                            <>
+                                                <Check size={20} />
+                                                Ditambahkan!
+                                            </>
+                                        ) : isAddingToCart ? (
+                                            <>
+                                                <Loader2 size={20} className="animate-spin" />
+                                                Menambahkan...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <ShoppingBag size={20} />
+                                                Tambah ke Keranjang
+                                            </>
+                                        )}
                                     </button>
                                     <button onClick={handleWishlist} className={`w-12 h-12 rounded-full border flex items-center justify-center transition-colors ${isWishlisted ? 'bg-red-50 border-red-200 text-red-500' : 'border-terra-200 text-terra-600 hover:bg-terra-50'}`}>
                                         <Heart size={20} className={isWishlisted ? 'fill-current' : ''} />

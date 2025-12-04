@@ -5,7 +5,8 @@ import {
     Search, SlidersHorizontal, Grid3X3, LayoutList, X,
     Star, ShoppingBag, Heart, ChevronLeft, ChevronRight, Eye
 } from 'lucide-react';
-import { Header, Footer, QuickViewModal } from '@/components/shop';
+import { QuickViewModal } from '@/components/shop';
+import { ShopLayout } from '@/layouts/ShopLayout';
 import { SEOHead, BreadcrumbStructuredData } from '@/components/seo';
 import { ApiProduct, ApiCategory, PaginatedResponse, ProductFilters } from '@/types/shop';
 
@@ -104,8 +105,7 @@ export default function ProductsIndex({ products, categories, currentCategory, f
             />
             <BreadcrumbStructuredData items={breadcrumbItems} />
             <div className="bg-noise" />
-            <Header cartCount={0} onCartClick={() => {}} onLogoClick={() => router.visit('/shop')} />
-
+            <ShopLayout>
             <main className="min-h-screen bg-white pt-28 pb-20">
                 <div className="max-w-[1400px] mx-auto px-6 md:px-12">
                     {/* Breadcrumb */}
@@ -189,8 +189,8 @@ export default function ProductsIndex({ products, categories, currentCategory, f
                 </div>
             </main>
 
-            <Footer />
             <QuickViewModal product={quickViewProduct} isOpen={!!quickViewProduct} onClose={() => setQuickViewProduct(null)} />
+            </ShopLayout>
         </>
     );
 }

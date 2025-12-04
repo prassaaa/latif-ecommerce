@@ -3,9 +3,10 @@ import { Link, router } from '@inertiajs/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Star, Heart, ShoppingBag, Minus, Plus, ChevronLeft, ChevronRight,
-    Truck, Shield, RotateCcw, Check, Share2, ZoomIn, X
+    Truck, Shield, RotateCcw, Check, Share2, ZoomIn, X, Loader2
 } from 'lucide-react';
-import { Header, Footer, RecentlyViewedSection, saveToRecentlyViewed, WhatsAppButton, ShareModal } from '@/components/shop';
+import { RecentlyViewedSection, saveToRecentlyViewed, WhatsAppButton, ShareModal } from '@/components/shop';
+import { ShopLayout } from '@/layouts/ShopLayout';
 import { SEOHead, ProductStructuredData, BreadcrumbStructuredData } from '@/components/seo';
 import { ApiProduct, ProductImage } from '@/types/shop';
 
@@ -20,6 +21,8 @@ export default function ProductShow({ product, relatedProducts }: Props) {
     const [isZoomed, setIsZoomed] = useState(false);
     const [isWishlisted, setIsWishlisted] = useState(false);
     const [isShareOpen, setIsShareOpen] = useState(false);
+    const [isAddingToCart, setIsAddingToCart] = useState(false);
+    const [cartMessage, setCartMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
     // Save to recently viewed on mount
     useEffect(() => {
@@ -27,12 +30,44 @@ export default function ProductShow({ product, relatedProducts }: Props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [product.id]);
 
+    // Auto hide cart message after 3 seconds
+    useEffect(() => {
+        if (cartMessage) {
+            const timer = setTimeout(() => setCartMessage(null), 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [cartMessage]);
+
     const images = product.images?.length
         ? product.images
         : [{ id: 0, image_url: '/images/placeholder-product.svg', alt_text: product.name } as ProductImage];
 
-    const handleAddToCart = () => {
-        router.post('/shop/cart', { product_id: product.id, quantity }, { preserveScroll: true });
+    const handleAddToCart = async () => {
+        setIsAddingToCart(true);
+        setCartMessage(null);
+        try {
+            const response = await fetch('/shop/cart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ product_id: product.id, quantity }),
+            });
+            const data = await response.json();
+            if (response.ok) {
+                setCartMessage({ type: 'success', text: data.message || 'Produk berhasil ditambahkan ke keranjang!' });
+                router.reload({ only: ['cart'] });
+            } else {
+                setCartMessage({ type: 'error', text: data.message || 'Gagal menambahkan produk ke keranjang' });
+            }
+        } catch (e) {
+            console.error('Error adding to cart:', e);
+            setCartMessage({ type: 'error', text: 'Terjadi kesalahan. Silakan coba lagi.' });
+        } finally {
+            setIsAddingToCart(false);
+        }
     };
 
     // SEO Data
@@ -81,9 +116,8 @@ export default function ProductShow({ product, relatedProducts }: Props) {
             />
             <BreadcrumbStructuredData items={breadcrumbItems} />
             <div className="bg-noise" />
-            <Header cartCount={0} onCartClick={() => {}} onLogoClick={() => router.visit('/shop')} />
-
-            <main className="min-h-screen bg-white pt-28 pb-20">
+            <ShopLayout showFooter={true} showWhatsApp={false}>
+                <main className="min-h-screen bg-white pt-28 pb-20">
                 <div className="max-w-[1400px] mx-auto px-6 md:px-12">
                     <Breadcrumb product={product} />
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
@@ -102,6 +136,8 @@ export default function ProductShow({ product, relatedProducts }: Props) {
                             setIsWishlisted={setIsWishlisted}
                             onAddToCart={handleAddToCart}
                             onShare={() => setIsShareOpen(true)}
+                            isAddingToCart={isAddingToCart}
+                            cartMessage={cartMessage}
                         />
                     </div>
                     {/* Customer Reviews */}
@@ -134,13 +170,12 @@ export default function ProductShow({ product, relatedProducts }: Props) {
                 imageUrl={images[0]?.image_url}
             />
 
-            <Footer />
-
             {/* WhatsApp Button */}
             <WhatsAppButton
                 phoneNumber="6281234567890"
                 message={`Halo, saya tertarik dengan produk ${product.name}`}
             />
+            </ShopLayout>
         </>
     );
 }
@@ -231,9 +266,11 @@ interface ProductInfoProps {
     setIsWishlisted: (w: boolean) => void;
     onAddToCart: () => void;
     onShare: () => void;
+    isAddingToCart: boolean;
+    cartMessage: { type: 'success' | 'error'; text: string } | null;
 }
 
-function ProductInfo({ product, quantity, setQuantity, isWishlisted, setIsWishlisted, onAddToCart, onShare }: ProductInfoProps) {
+function ProductInfo({ product, quantity, setQuantity, isWishlisted, setIsWishlisted, onAddToCart, onShare, isAddingToCart, cartMessage }: ProductInfoProps) {
     return (
         <div className="space-y-6">
             <div className="flex items-center gap-3 text-sm text-terra-500">
@@ -269,14 +306,46 @@ function ProductInfo({ product, quantity, setQuantity, isWishlisted, setIsWishli
                     {product.track_stock && <span className="text-terra-500">({product.stock_quantity} unit)</span>}</>
                 ) : (<span className="text-red-500 font-medium">Stok Habis</span>)}
             </div>
+            {/* Cart Message Notification */}
+            <AnimatePresence>
+                {cartMessage && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className={`p-4 rounded-lg flex items-center gap-3 ${
+                            cartMessage.type === 'success'
+                                ? 'bg-green-50 border border-green-200 text-green-700'
+                                : 'bg-red-50 border border-red-200 text-red-700'
+                        }`}
+                    >
+                        {cartMessage.type === 'success' ? (
+                            <Check className="text-green-500 flex-shrink-0" size={20} />
+                        ) : (
+                            <X className="text-red-500 flex-shrink-0" size={20} />
+                        )}
+                        <span className="font-medium">{cartMessage.text}</span>
+                    </motion.div>
+                )}
+            </AnimatePresence>
             <div className="flex items-center gap-4">
                 <div className="flex items-center border border-terra-200 rounded-full">
-                    <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="p-3 hover:bg-terra-50 rounded-l-full"><Minus size={18} /></button>
+                    <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="p-3 hover:bg-terra-50 rounded-l-full" disabled={isAddingToCart}><Minus size={18} /></button>
                     <span className="w-12 text-center font-medium">{quantity}</span>
-                    <button onClick={() => setQuantity(quantity + 1)} disabled={product.track_stock && quantity >= product.stock_quantity} className="p-3 hover:bg-terra-50 rounded-r-full disabled:opacity-50"><Plus size={18} /></button>
+                    <button onClick={() => setQuantity(quantity + 1)} disabled={(product.track_stock && quantity >= product.stock_quantity) || isAddingToCart} className="p-3 hover:bg-terra-50 rounded-r-full disabled:opacity-50"><Plus size={18} /></button>
                 </div>
-                <button onClick={onAddToCart} disabled={!product.is_in_stock} className="flex-1 flex items-center justify-center gap-3 bg-terra-900 text-white py-4 rounded-full font-medium hover:bg-wood disabled:opacity-50 disabled:cursor-not-allowed">
-                    <ShoppingBag size={20} />Tambah ke Keranjang
+                <button onClick={onAddToCart} disabled={!product.is_in_stock || isAddingToCart} className="flex-1 flex items-center justify-center gap-3 bg-terra-900 text-white py-4 rounded-full font-medium hover:bg-wood disabled:opacity-50 disabled:cursor-not-allowed transition-all">
+                    {isAddingToCart ? (
+                        <>
+                            <Loader2 size={20} className="animate-spin" />
+                            Menambahkan...
+                        </>
+                    ) : (
+                        <>
+                            <ShoppingBag size={20} />
+                            Tambah ke Keranjang
+                        </>
+                    )}
                 </button>
                 <button onClick={() => setIsWishlisted(!isWishlisted)} className={`p-4 rounded-full border transition-colors ${isWishlisted ? 'bg-red-50 border-red-200 text-red-500' : 'border-terra-200 hover:border-terra-900'}`}>
                     <Heart size={20} className={isWishlisted ? 'fill-current' : ''} />

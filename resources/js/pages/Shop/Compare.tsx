@@ -1,6 +1,7 @@
+import { useState } from 'react';
 import { Link, router } from '@inertiajs/react';
-import { GitCompare, Star, ShoppingBag, X, ArrowLeft, Check, Minus } from 'lucide-react';
-import { Header, Footer, WhatsAppButton } from '@/components/shop';
+import { GitCompare, Star, ShoppingBag, X, ArrowLeft, Check, Minus, Loader2 } from 'lucide-react';
+import { ShopLayout } from '@/layouts/ShopLayout';
 import { SEOHead } from '@/components/seo';
 import { ApiProduct } from '@/types/shop';
 
@@ -9,6 +10,9 @@ interface Props {
 }
 
 export default function Compare({ products }: Props) {
+    const [addingToCart, setAddingToCart] = useState<number | null>(null);
+    const [cartSuccess, setCartSuccess] = useState<number | null>(null);
+
     const handleRemove = (productId: number) => {
         const newIds = products.filter(p => p.id !== productId).map(p => p.id).join(',');
         if (newIds) {
@@ -18,8 +22,30 @@ export default function Compare({ products }: Props) {
         }
     };
 
-    const handleAddToCart = (productId: number) => {
-        router.post('/shop/cart', { product_id: productId, quantity: 1 }, { preserveScroll: true });
+    const handleAddToCart = async (productId: number) => {
+        setAddingToCart(productId);
+        try {
+            const response = await fetch('/shop/cart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ product_id: productId, quantity: 1 }),
+            });
+            if (response.ok) {
+                setCartSuccess(productId);
+                setTimeout(() => {
+                    setCartSuccess(null);
+                    router.reload({ only: ['cart'] });
+                }, 1500);
+            }
+        } catch (e) {
+            console.error('Error adding to cart:', e);
+        } finally {
+            setAddingToCart(null);
+        }
     };
 
     // Collect all unique specs from products
@@ -38,8 +64,7 @@ export default function Compare({ products }: Props) {
                 noindex={true}
             />
             <div className="bg-noise" />
-            <Header cartCount={0} onCartClick={() => {}} onLogoClick={() => router.visit('/shop')} />
-
+            <ShopLayout>
             <main className="min-h-screen bg-sand-50 pt-28 pb-20">
                 <div className="max-w-[1400px] mx-auto px-6 md:px-12">
                     {/* Header */}
@@ -122,8 +147,31 @@ export default function Compare({ products }: Props) {
                                 <div className="p-4 bg-terra-50"></div>
                                 {products.map((product) => (
                                     <div key={product.id} className="p-4 border-l border-terra-100">
-                                        <button onClick={() => handleAddToCart(product.id)} disabled={!product.is_in_stock} className="w-full flex items-center justify-center gap-2 bg-terra-900 text-white py-3 rounded-full hover:bg-wood-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                                            <ShoppingBag size={18} />Tambah ke Keranjang
+                                        <button
+                                            onClick={() => handleAddToCart(product.id)}
+                                            disabled={!product.is_in_stock || addingToCart === product.id || cartSuccess === product.id}
+                                            className={`w-full flex items-center justify-center gap-2 py-3 rounded-full transition-colors disabled:cursor-not-allowed ${
+                                                cartSuccess === product.id
+                                                    ? 'bg-green-500 text-white'
+                                                    : 'bg-terra-900 text-white hover:bg-wood-dark disabled:opacity-50'
+                                            }`}
+                                        >
+                                            {cartSuccess === product.id ? (
+                                                <>
+                                                    <Check size={18} />
+                                                    Ditambahkan!
+                                                </>
+                                            ) : addingToCart === product.id ? (
+                                                <>
+                                                    <Loader2 size={18} className="animate-spin" />
+                                                    Menambahkan...
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <ShoppingBag size={18} />
+                                                    Tambah ke Keranjang
+                                                </>
+                                            )}
                                         </button>
                                     </div>
                                 ))}
@@ -132,9 +180,7 @@ export default function Compare({ products }: Props) {
                     )}
                 </div>
             </main>
-
-            <Footer />
-            <WhatsAppButton phoneNumber="6281234567890" message="Halo, saya ingin bertanya tentang produk" />
+            </ShopLayout>
         </>
     );
 }

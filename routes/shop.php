@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Public routes - Produk
-Route::prefix('shop')->name('shop.')->group(function () {
+Route::prefix('shop')->name('shop.')->middleware('share.cart')->group(function () {
     // Homepage - Landing page with products
     Route::get('/', [HomeController::class, 'index'])->name('home');
 

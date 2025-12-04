@@ -1,6 +1,5 @@
-import { router } from '@inertiajs/react';
 import { Award, Users, Leaf, Heart, Target, Clock } from 'lucide-react';
-import { Header, Footer, WhatsAppButton } from '@/components/shop';
+import { ShopLayout } from '@/layouts/ShopLayout';
 import { SEOHead } from '@/components/seo';
 
 const VALUES = [
@@ -26,8 +25,7 @@ export default function About() {
                 keywords={['tentang latif living', 'furnitur jepara', 'mebel indonesia', 'furniture premium', 'pengrajin mebel']}
             />
             <div className="bg-noise" />
-            <Header cartCount={0} onCartClick={() => {}} onLogoClick={() => router.visit('/shop')} />
-
+            <ShopLayout>
             <main className="min-h-screen bg-sand-50 pt-28 pb-20">
                 {/* Hero */}
                 <div className="bg-gradient-to-r from-terra-800 to-terra-900 text-white py-20 mb-16">
@@ -145,9 +143,7 @@ export default function About() {
                     </div>
                 </div>
             </main>
-
-            <Footer />
-            <WhatsAppButton phoneNumber="6281234567890" message="Halo, saya ingin tahu lebih lanjut tentang Latif Living" />
+            </ShopLayout>
         </>
     );
 }

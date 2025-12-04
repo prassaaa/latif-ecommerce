@@ -1,7 +1,7 @@
-import { router, useForm } from '@inertiajs/react';
+import { useForm } from '@inertiajs/react';
 import { Palette, Ruler, Upload, Send, CheckCircle, X } from 'lucide-react';
 import { useState, useRef } from 'react';
-import { Header, Footer, WhatsAppButton } from '@/components/shop';
+import { ShopLayout } from '@/layouts/ShopLayout';
 import { SEOHead } from '@/components/seo';
 
 const FURNITURE_TYPES = [
@@ -77,7 +77,7 @@ export default function CustomOrder() {
                     description="Permintaan custom order Anda telah terkirim. Tim Latif Living akan menghubungi Anda dalam 1-2 hari kerja."
                 />
                 <div className="bg-noise" />
-                <Header cartCount={0} onCartClick={() => {}} onLogoClick={() => router.visit('/shop')} />
+                <ShopLayout>
                 <main className="min-h-screen bg-sand-50 pt-28 pb-20 flex items-center justify-center">
                     <div className="text-center max-w-md mx-auto px-6">
                         <div className="w-24 h-24 bg-wood/20 rounded-full flex items-center justify-center mx-auto mb-8">
@@ -92,7 +92,7 @@ export default function CustomOrder() {
                         </button>
                     </div>
                 </main>
-                <Footer />
+                </ShopLayout>
             </>
         );
     }
@@ -105,8 +105,7 @@ export default function CustomOrder() {
                 keywords={['custom order', 'furnitur custom', 'pesan mebel', 'furniture custom jepara', 'desain furnitur']}
             />
             <div className="bg-noise" />
-            <Header cartCount={0} onCartClick={() => {}} onLogoClick={() => router.visit('/shop')} />
-
+            <ShopLayout>
             <main className="min-h-screen bg-sand-50 pt-28 pb-20">
                 {/* Hero Banner */}
                 <div className="bg-gradient-to-r from-wood-dark to-terra-800 text-white py-16 mb-12">
@@ -242,9 +241,7 @@ export default function CustomOrder() {
                     </form>
                 </div>
             </main>
-
-            <Footer />
-            <WhatsAppButton phoneNumber="6281234567890" message="Halo, saya ingin konsultasi custom order furniture" />
+            </ShopLayout>
         </>
     );
 }

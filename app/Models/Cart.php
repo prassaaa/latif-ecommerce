@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use Cknow\Money\Money;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -77,19 +76,9 @@ class Cart extends Model
         return $items->sum(fn (CartItem $item) => $item->subtotal);
     }
 
-    public function getSubtotalMoneyAttribute(): Money
-    {
-        return Money::IDR($this->subtotal);
-    }
-
     public function getTotalAttribute(): int
     {
         return max(0, $this->subtotal - $this->discount_amount);
-    }
-
-    public function getTotalMoneyAttribute(): Money
-    {
-        return Money::IDR($this->total);
     }
 
     public function getItemCountAttribute(): int
@@ -104,12 +93,12 @@ class Cart extends Model
 
     public function getFormattedSubtotalAttribute(): string
     {
-        return $this->subtotal_money->format();
+        return format_rupiah($this->subtotal);
     }
 
     public function getFormattedTotalAttribute(): string
     {
-        return $this->total_money->format();
+        return format_rupiah($this->total);
     }
 
     // ==================== Helper Methods ====================

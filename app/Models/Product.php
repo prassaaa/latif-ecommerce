@@ -6,7 +6,6 @@ namespace App\Models;
 
 use App\Enums\ProductStatus;
 use App\Enums\SaleType;
-use Cknow\Money\Money;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -272,16 +271,6 @@ class Product extends Model implements HasMedia
 
     // ==================== Accessors ====================
 
-    public function getPriceMoneyAttribute(): Money
-    {
-        return Money::IDR($this->price);
-    }
-
-    public function getComparePriceMoneyAttribute(): ?Money
-    {
-        return $this->compare_price ? Money::IDR($this->compare_price) : null;
-    }
-
     public function getFinalPriceAttribute(): int
     {
         if (! $this->hasActiveDiscount()) {
@@ -291,11 +280,6 @@ class Product extends Model implements HasMedia
         return (int) round($this->price * (1 - $this->discount_percentage / 100));
     }
 
-    public function getFinalPriceMoneyAttribute(): Money
-    {
-        return Money::IDR($this->final_price);
-    }
-
     public function getSavingsAttribute(): int
     {
         return $this->price - $this->final_price;
@@ -303,12 +287,17 @@ class Product extends Model implements HasMedia
 
     public function getFormattedPriceAttribute(): string
     {
-        return $this->price_money->format();
+        return format_rupiah($this->price);
+    }
+
+    public function getFormattedComparePriceAttribute(): ?string
+    {
+        return $this->compare_price ? format_rupiah($this->compare_price) : null;
     }
 
     public function getFormattedFinalPriceAttribute(): string
     {
-        return $this->final_price_money->format();
+        return format_rupiah($this->final_price);
     }
 
     public function getPrimaryImageAttribute(): ?ProductImage

@@ -1,6 +1,6 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { ArrowLeft, Package, MapPin, CreditCard, Truck, Clock, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
-import { Header, Footer } from '@/components/shop';
+import { ShopLayout } from '@/layouts/ShopLayout';
 import { useState } from 'react';
 
 interface OrderStatus {
@@ -78,8 +78,7 @@ export default function OrderShow({ order }: Props) {
         <>
             <Head title={`Pesanan #${order.order_number} - Latif Living`} />
             <div className="bg-noise" />
-            <Header cartCount={0} onCartClick={() => {}} onLogoClick={() => router.visit('/shop')} />
-
+            <ShopLayout>
             <main className="min-h-screen bg-sand-50 pt-28 pb-20">
                 <div className="max-w-4xl mx-auto px-6 md:px-12">
                     {/* Back Button */}
@@ -208,8 +207,7 @@ export default function OrderShow({ order }: Props) {
                     </div>
                 </div>
             </main>
-
-            <Footer />
+            </ShopLayout>
         </>
     );
 }

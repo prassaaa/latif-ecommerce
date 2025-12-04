@@ -1,7 +1,7 @@
-import { Link, router } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
-import { Header, Footer } from '@/components/shop';
+import { ShopLayout } from '@/layouts/ShopLayout';
 import { SEOHead } from '@/components/seo';
 import { ApiCategory } from '@/types/shop';
 
@@ -23,8 +23,7 @@ export default function CategoriesIndex({ categories }: Props) {
                 keywords={['kategori furnitur', 'ruang tamu', 'ruang makan', 'kamar tidur', 'furnitur kantor', 'outdoor furniture']}
             />
             <div className="bg-noise" />
-            <Header cartCount={0} onCartClick={() => {}} onLogoClick={() => router.visit('/shop')} />
-
+            <ShopLayout>
             <main className="min-h-screen bg-white pt-28 pb-20">
                 <div className="max-w-[1400px] mx-auto px-6 md:px-12">
                     {/* Header */}
@@ -51,8 +50,7 @@ export default function CategoriesIndex({ categories }: Props) {
                     )}
                 </div>
             </main>
-
-            <Footer />
+            </ShopLayout>
         </>
     );
 }

@@ -1,7 +1,7 @@
 import { Link, router } from '@inertiajs/react';
 import { Tag, Filter, ChevronDown, Star, Clock } from 'lucide-react';
 import { useState } from 'react';
-import { Header, Footer } from '@/components/shop';
+import { ShopLayout } from '@/layouts/ShopLayout';
 import { SEOHead } from '@/components/seo';
 import { ApiProduct, ApiCategory, PaginatedResponse } from '@/types/shop';
 
@@ -37,8 +37,7 @@ export default function Clearance({ products, categories, filters }: Props) {
                 keywords={['clearance sale', 'cuci gudang', 'diskon furnitur', 'obral mebel', 'sale latif living']}
             />
             <div className="bg-noise" />
-            <Header cartCount={0} onCartClick={() => {}} onLogoClick={() => router.visit('/shop')} />
-
+            <ShopLayout>
             <main className="min-h-screen bg-sand-50 pt-28 pb-20">
                 {/* Hero Banner */}
                 <div className="bg-gradient-to-r from-terra-700 to-terra-900 text-white py-16 mb-12">
@@ -119,8 +118,7 @@ export default function Clearance({ products, categories, filters }: Props) {
                     )}
                 </div>
             </main>
-
-            <Footer />
+            </ShopLayout>
         </>
     );
 }

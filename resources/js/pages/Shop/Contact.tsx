@@ -1,7 +1,7 @@
-import { router, useForm } from '@inertiajs/react';
+import { useForm } from '@inertiajs/react';
 import { MapPin, Phone, Mail, Clock, Send, CheckCircle, MessageCircle } from 'lucide-react';
 import { useState } from 'react';
-import { Header, Footer, WhatsAppButton } from '@/components/shop';
+import { ShopLayout } from '@/layouts/ShopLayout';
 import { SEOHead } from '@/components/seo';
 
 const CONTACT_INFO = [
@@ -41,8 +41,7 @@ export default function Contact() {
                 keywords={['kontak latif living', 'alamat toko furnitur', 'telepon latif living', 'email latif living']}
             />
             <div className="bg-noise" />
-            <Header cartCount={0} onCartClick={() => {}} onLogoClick={() => router.visit('/shop')} />
-
+            <ShopLayout>
             <main className="min-h-screen bg-sand-50 pt-28 pb-20">
                 {/* Hero */}
                 <div className="bg-gradient-to-r from-wood-dark to-terra-800 text-white py-16 mb-16">
@@ -152,9 +151,7 @@ export default function Contact() {
                     </div>
                 </div>
             </main>
-
-            <Footer />
-            <WhatsAppButton phoneNumber="6281234567890" message="Halo, saya ingin bertanya tentang produk Latif Living" />
+            </ShopLayout>
         </>
     );
 }

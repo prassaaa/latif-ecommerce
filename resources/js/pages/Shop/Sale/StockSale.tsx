@@ -1,7 +1,7 @@
 import { Link, router } from '@inertiajs/react';
 import { Package, Filter, ChevronDown, Star, Warehouse } from 'lucide-react';
 import { useState } from 'react';
-import { Header, Footer, WhatsAppButton } from '@/components/shop';
+import { ShopLayout } from '@/layouts/ShopLayout';
 import { SEOHead } from '@/components/seo';
 import { ApiProduct, ApiCategory, PaginatedResponse } from '@/types/shop';
 
@@ -37,8 +37,7 @@ export default function StockSale({ products, categories, filters }: Props) {
                 keywords={['stock sale', 'harga pabrik', 'grosir furnitur', 'harga grosir mebel', 'reseller furniture']}
             />
             <div className="bg-noise" />
-            <Header cartCount={0} onCartClick={() => {}} onLogoClick={() => router.visit('/shop')} />
-
+            <ShopLayout>
             <main className="min-h-screen bg-sand-50 pt-28 pb-20">
                 {/* Hero Banner */}
                 <div className="bg-gradient-to-r from-terra-900 to-terra-700 text-white py-16 mb-12">
@@ -132,9 +131,7 @@ export default function StockSale({ products, categories, filters }: Props) {
                     )}
                 </div>
             </main>
-
-            <Footer />
-            <WhatsAppButton phoneNumber="6281234567890" message="Halo, saya tertarik dengan produk Stock Sale" />
+            </ShopLayout>
         </>
     );
 }

@@ -1,6 +1,6 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { Package, ChevronRight, Clock, Truck, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
-import { Header, Footer } from '@/components/shop';
+import { ShopLayout } from '@/layouts/ShopLayout';
 import { PaginatedResponse } from '@/types/shop';
 
 interface OrderStatus {
@@ -50,8 +50,7 @@ export default function OrdersIndex({ orders }: Props) {
         <>
             <Head title="Pesanan Saya - Latif Living" />
             <div className="bg-noise" />
-            <Header cartCount={0} onCartClick={() => {}} onLogoClick={() => router.visit('/shop')} />
-
+            <ShopLayout>
             <main className="min-h-screen bg-sand-50 pt-28 pb-20">
                 <div className="max-w-4xl mx-auto px-6 md:px-12">
                     <h1 className="font-serif text-3xl text-terra-900 mb-8">Pesanan Saya</h1>
@@ -87,8 +86,7 @@ export default function OrdersIndex({ orders }: Props) {
                     )}
                 </div>
             </main>
-
-            <Footer />
+            </ShopLayout>
         </>
     );
 }

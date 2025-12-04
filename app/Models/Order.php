@@ -7,7 +7,6 @@ namespace App\Models;
 use App\Enums\OrderStatus;
 use App\Enums\PaymentMethod;
 use App\Enums\PaymentStatus;
-use Cknow\Money\Money;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -163,21 +162,6 @@ class Order extends Model
 
     // ==================== Accessors ====================
 
-    public function getTotalMoneyAttribute(): Money
-    {
-        return Money::IDR($this->total);
-    }
-
-    public function getSubtotalMoneyAttribute(): Money
-    {
-        return Money::IDR($this->subtotal);
-    }
-
-    public function getShippingCostMoneyAttribute(): Money
-    {
-        return Money::IDR($this->shipping_cost);
-    }
-
     public function getItemCountAttribute(): int
     {
         return $this->items->sum('quantity');
@@ -195,22 +179,22 @@ class Order extends Model
 
     public function getFormattedSubtotalAttribute(): string
     {
-        return $this->subtotal_money->format();
+        return format_rupiah($this->subtotal);
     }
 
     public function getFormattedTotalAttribute(): string
     {
-        return $this->total_money->format();
+        return format_rupiah($this->total);
     }
 
     public function getFormattedShippingCostAttribute(): string
     {
-        return $this->shipping_cost_money->format();
+        return format_rupiah($this->shipping_cost);
     }
 
     public function getFormattedDiscountAttribute(): string
     {
-        return Money::IDR($this->discount_amount)->format();
+        return format_rupiah($this->discount_amount);
     }
 
     // ==================== Helper Methods ====================

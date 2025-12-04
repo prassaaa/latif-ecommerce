@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use Cknow\Money\Money;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -61,24 +60,14 @@ class OrderItem extends Model
 
     // ==================== Accessors ====================
 
-    public function getUnitPriceMoneyAttribute(): Money
-    {
-        return Money::IDR($this->unit_price);
-    }
-
-    public function getSubtotalMoneyAttribute(): Money
-    {
-        return Money::IDR($this->subtotal);
-    }
-
     public function getFormattedUnitPriceAttribute(): string
     {
-        return $this->unit_price_money->format();
+        return format_rupiah($this->unit_price);
     }
 
     public function getFormattedSubtotalAttribute(): string
     {
-        return $this->subtotal_money->format();
+        return format_rupiah($this->subtotal);
     }
 
     // ==================== Helper Methods ====================
