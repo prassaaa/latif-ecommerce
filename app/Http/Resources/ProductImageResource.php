@@ -18,7 +18,8 @@ class ProductImageResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'url' => asset('storage/'.$this->image_path),
+            'image_url' => asset('storage/'.$this->image_path),
+            'url' => asset('storage/'.$this->image_path), // alias for compatibility
             'alt_text' => $this->alt_text,
             'is_primary' => $this->is_primary,
             'sort_order' => $this->sort_order,

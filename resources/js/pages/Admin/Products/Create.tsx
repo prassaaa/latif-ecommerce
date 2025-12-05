@@ -53,12 +53,18 @@ export default function CreateProduct({ categories }: CreateProductProps) {
         e.preventDefault();
 
         const formData = new FormData();
-        Object.entries(data).forEach(([key, value]) => {
-            formData.append(key, String(value));
-        });
+        formData.append('name', data.name);
+        formData.append('sku', data.sku);
+        formData.append('category_id', data.category_id);
+        formData.append('description', data.description);
+        formData.append('price', data.price);
+        formData.append('discount_percentage', data.discount_percentage);
+        formData.append('stock_quantity', data.stock_quantity);
+        formData.append('status', data.status);
+        formData.append('is_featured', data.is_featured ? '1' : '0');
 
-        previewImages.forEach((img, index) => {
-            formData.append(`images[${index}]`, img.file);
+        previewImages.forEach((img) => {
+            formData.append('images[]', img.file);
         });
 
         router.post('/admin/products', formData, {

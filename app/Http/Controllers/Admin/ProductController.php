@@ -91,7 +91,12 @@ class ProductController extends Controller implements HasMiddleware
     public function store(ProductStoreRequest $request, CreateProductAction $action): RedirectResponse
     {
         /** @var array<int, \Illuminate\Http\UploadedFile> $images */
-        $images = $request->file('images', []);
+        $images = $request->file('images') ?? [];
+
+        // Ensure images is an array (could be associative from form)
+        if (!empty($images)) {
+            $images = array_values($images);
+        }
 
         $action->execute($request->validated(), $images);
 
@@ -134,10 +139,20 @@ class ProductController extends Controller implements HasMiddleware
         UpdateProductAction $action
     ): RedirectResponse {
         /** @var array<int, \Illuminate\Http\UploadedFile> $newImages */
-        $newImages = $request->file('images', []);
+        $newImages = $request->file('images') ?? [];
+
+        // Ensure images is an indexed array
+        if (!empty($newImages)) {
+            $newImages = array_values($newImages);
+        }
 
         /** @var array<int, int> $deleteImageIds */
         $deleteImageIds = $request->input('delete_images', []);
+
+        // Ensure delete_images is an array of integers
+        if (!empty($deleteImageIds)) {
+            $deleteImageIds = array_map('intval', array_values($deleteImageIds));
+        }
 
         $action->execute($product, $request->validated(), $newImages, $deleteImageIds);
 

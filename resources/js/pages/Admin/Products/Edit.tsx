@@ -88,12 +88,12 @@ export default function EditProduct({ product, categories }: EditProductProps) {
             formData.append(key, String(value));
         });
 
-        newImages.forEach((img, index) => {
-            formData.append(`images[${index}]`, img.file);
+        newImages.forEach((img) => {
+            formData.append('images[]', img.file);
         });
 
-        deleteImageIds.forEach((id, index) => {
-            formData.append(`delete_images[${index}]`, String(id));
+        deleteImageIds.forEach((id) => {
+            formData.append('delete_images[]', String(id));
         });
 
         router.post(`/admin/products/${product.id}`, formData, {

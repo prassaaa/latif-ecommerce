@@ -111,11 +111,18 @@ export default function ProductsIndex({ products, filters }: ProductsIndexProps)
                                         <td className="py-4 px-6">
                                             <div className="flex items-center gap-3">
                                                 <div className="w-12 h-12 bg-terra-100 rounded-lg flex items-center justify-center overflow-hidden">
-                                                    {product.primary_image?.image_url ? (
-                                                        <img src={product.primary_image.image_url} alt={product.name} className="w-full h-full object-cover" />
-                                                    ) : (
-                                                        <Package className="w-6 h-6 text-terra-400" />
-                                                    )}
+                                                    {(() => {
+                                                        const imageUrl = product.primary_image?.image_url || (product.images && product.images.length > 0 ? product.images[0].image_url : null);
+                                                        return imageUrl ? (
+                                                            <img
+                                                                src={imageUrl}
+                                                                alt={product.name}
+                                                                className="w-full h-full object-cover"
+                                                            />
+                                                        ) : (
+                                                            <Package className="w-6 h-6 text-terra-400" />
+                                                        );
+                                                    })()}
                                                 </div>
                                                 <p className="font-medium text-terra-900">{product.name}</p>
                                             </div>

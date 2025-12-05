@@ -80,7 +80,7 @@ export default function CartIndex({ cart }: Props) {
 
     const getProductImage = (product: Product) => {
         const primary = product.images?.find(img => img.is_primary);
-        return primary?.url || product.images?.[0]?.url || '/images/placeholder.jpg';
+        return primary?.url || product.images?.[0]?.url || '/images/placeholder-product.svg';
     };
 
     return (

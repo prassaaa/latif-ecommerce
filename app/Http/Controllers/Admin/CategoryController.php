@@ -51,7 +51,7 @@ class CategoryController extends Controller implements HasMiddleware
             ->get();
 
         return Inertia::render('Admin/Categories/Create', [
-            'parentCategories' => CategoryResource::collection($parentCategories),
+            'parentCategories' => CategoryResource::collection($parentCategories)->resolve(),
         ]);
     }
 
@@ -76,8 +76,8 @@ class CategoryController extends Controller implements HasMiddleware
             ->get();
 
         return Inertia::render('Admin/Categories/Edit', [
-            'category' => new CategoryResource($category),
-            'parentCategories' => CategoryResource::collection($parentCategories),
+            'category' => (new CategoryResource($category))->resolve(),
+            'parentCategories' => CategoryResource::collection($parentCategories)->resolve(),
         ]);
     }
 

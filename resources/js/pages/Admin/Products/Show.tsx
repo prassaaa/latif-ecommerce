@@ -2,6 +2,14 @@ import AdminLayout from '@/layouts/admin/admin-layout';
 import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft, Pencil, Package, Tag, Layers, BarChart3 } from 'lucide-react';
 
+interface ProductImage {
+    id: number;
+    image_url: string;
+    url: string;
+    alt_text: string | null;
+    is_primary: boolean;
+}
+
 interface Product {
     id: number;
     name: string;
@@ -17,7 +25,8 @@ interface Product {
     category: { id: number; name: string } | null;
     status: { value: string; label: string };
     is_featured: boolean;
-    images: Array<{ id: number; url: string }>;
+    images: ProductImage[];
+    primary_image: ProductImage | null;
     created_at: string;
     updated_at: string;
 }
@@ -106,6 +115,39 @@ export default function ShowProduct({ product }: ShowProductProps) {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Product Info */}
                     <div className="lg:col-span-2 space-y-6">
+                        {/* Product Images */}
+                        <div className="bg-white rounded-2xl p-6 shadow-sm border border-terra-100">
+                            <h2 className="text-lg font-semibold text-terra-900 mb-4">Gambar Produk</h2>
+                            {product.images && product.images.length > 0 ? (
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    {product.images.map((image) => (
+                                        <div
+                                            key={image.id}
+                                            className={`relative aspect-square rounded-xl overflow-hidden border-2 ${image.is_primary ? 'border-terra-500' : 'border-terra-100'}`}
+                                        >
+                                            <img
+                                                src={image.image_url || image.url}
+                                                alt={image.alt_text || product.name}
+                                                className="w-full h-full object-cover"
+                                            />
+                                            {image.is_primary && (
+                                                <span className="absolute top-2 left-2 bg-terra-900 text-white text-xs px-2 py-1 rounded-md">
+                                                    Utama
+                                                </span>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="flex items-center justify-center h-40 bg-terra-50 rounded-xl">
+                                    <div className="text-center text-terra-400">
+                                        <Package className="w-12 h-12 mx-auto mb-2" />
+                                        <p>Tidak ada gambar</p>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
                         <div className="bg-white rounded-2xl p-6 shadow-sm border border-terra-100">
                             <h2 className="text-lg font-semibold text-terra-900 mb-4">Deskripsi Produk</h2>
                             <p className="text-terra-600 leading-relaxed">{product.description || 'Tidak ada deskripsi'}</p>

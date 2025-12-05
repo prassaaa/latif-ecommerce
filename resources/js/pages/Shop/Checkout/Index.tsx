@@ -87,7 +87,7 @@ export default function CheckoutIndex({ cart, addresses, paymentMethods, payment
 
     const getProductImage = (product: CartItem['product']) => {
         const primary = product.images?.find(img => img.is_primary);
-        return primary?.url || product.images?.[0]?.url || '/images/placeholder.jpg';
+        return primary?.url || product.images?.[0]?.url || '/images/placeholder-product.svg';
     };
 
     return (

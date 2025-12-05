@@ -56,14 +56,8 @@ class ProductSeeder extends Seeder
                 'meta_description' => $productData['short_description'],
             ]);
 
-            // Create primary image
-            ProductImage::create([
-                'product_id' => $product->id,
-                'image_path' => 'products/placeholder.jpg',
-                'alt_text' => $productData['name'],
-                'is_primary' => true,
-                'sort_order' => 0,
-            ]);
+            // Create primary image - skip for seeder, products will be added without images
+            // Admin can upload real images later
         }
     }
 
