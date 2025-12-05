@@ -1,7 +1,8 @@
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import { ShoppingBag, Minus, Plus, Trash2, ArrowRight, Bookmark, ShoppingCart } from 'lucide-react';
 import { ShopLayout } from '@/layouts/ShopLayout';
 import { useState } from 'react';
+import { SiteSettings } from '@/types';
 
 interface ProductImage {
     id: number;
@@ -43,6 +44,8 @@ interface Props {
 }
 
 export default function CartIndex({ cart }: Props) {
+    const { siteSettings } = usePage<{ siteSettings?: SiteSettings }>().props;
+    const siteName = siteSettings?.site_name || 'Latif Living';
     const [loading, setLoading] = useState<number | null>(null);
 
     const updateQuantity = (itemId: number, quantity: number) => {
@@ -85,7 +88,7 @@ export default function CartIndex({ cart }: Props) {
 
     return (
         <>
-            <Head title="Keranjang Belanja - Latif Living" />
+            <Head title={`Keranjang Belanja - ${siteName}`} />
             <div className="bg-noise" />
             <ShopLayout>
             <main className="min-h-screen bg-sand-50 pt-28 pb-20">

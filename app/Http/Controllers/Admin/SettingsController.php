@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -52,6 +53,9 @@ class SettingsController extends Controller
                 ['value' => $value ?? '']
             );
         }
+
+        // Clear site settings cache
+        Cache::forget('site_settings');
 
         return back()->with('success', 'Pengaturan berhasil disimpan.');
     }

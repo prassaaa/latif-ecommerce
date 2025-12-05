@@ -22,11 +22,24 @@ export interface NavItem {
     isActive?: boolean;
 }
 
+export interface SiteSettings {
+    site_name: string;
+    site_description: string;
+    contact_email: string;
+    contact_phone: string;
+    contact_whatsapp: string;
+    address: string;
+    facebook_url: string;
+    instagram_url: string;
+    tiktok_url: string;
+}
+
 export interface SharedData {
     name: string;
     quote: { message: string; author: string };
     auth: Auth;
     sidebarOpen: boolean;
+    siteSettings: SiteSettings;
     [key: string]: unknown;
 }
 

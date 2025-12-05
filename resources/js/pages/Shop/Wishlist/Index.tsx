@@ -1,9 +1,10 @@
-import { Link, router } from '@inertiajs/react';
+import { Link, router, usePage } from '@inertiajs/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, ShoppingBag, Trash2, ArrowRight } from 'lucide-react';
 import { ShopLayout } from '@/layouts/ShopLayout';
 import { SEOHead } from '@/components/seo';
 import { ApiProduct } from '@/types/shop';
+import { SiteSettings } from '@/types';
 import { useState } from 'react';
 
 interface Props {
@@ -11,6 +12,8 @@ interface Props {
 }
 
 export default function WishlistIndex({ products: initialProducts }: Props) {
+    const { siteSettings } = usePage<{ siteSettings?: SiteSettings }>().props;
+    const siteName = siteSettings?.site_name || 'Latif Living';
     const [products, setProducts] = useState(initialProducts);
     const [removingId, setRemovingId] = useState<number | null>(null);
 
@@ -35,7 +38,7 @@ export default function WishlistIndex({ products: initialProducts }: Props) {
         <>
             <SEOHead
                 title="Wishlist Saya"
-                description="Daftar produk favorit Anda di Latif Living. Simpan produk yang Anda sukai dan beli kapan saja."
+                description={`Daftar produk favorit Anda di ${siteName}. Simpan produk yang Anda sukai dan beli kapan saja.`}
                 noindex={true}
             />
             <div className="bg-noise" />

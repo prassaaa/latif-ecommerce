@@ -3,6 +3,7 @@ import { router, usePage } from '@inertiajs/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X, ShoppingBag, Minus, Plus, Trash2 } from 'lucide-react';
 import { Header, Footer, WhatsAppButton } from '@/components/shop';
+import { SiteSettings } from '@/types';
 
 interface CartItem {
     id: number;
@@ -37,7 +38,6 @@ interface ShopLayoutProps {
     children: ReactNode;
     showFooter?: boolean;
     showWhatsApp?: boolean;
-    whatsAppPhone?: string;
     whatsAppMessage?: string;
     bannerVisible?: boolean;
 }
@@ -46,13 +46,15 @@ export function ShopLayout({
     children,
     showFooter = true,
     showWhatsApp = true,
-    whatsAppPhone = "6281234567890",
     whatsAppMessage = "Halo, saya ingin bertanya tentang produk",
     bannerVisible = false
 }: ShopLayoutProps) {
-    const { cart } = usePage<{ cart: SharedCart }>().props;
+    const { cart, siteSettings } = usePage<{ cart: SharedCart; siteSettings: SiteSettings }>().props;
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [updatingItem, setUpdatingItem] = useState<number | null>(null);
+
+    // Use WhatsApp from settings, fallback to empty string
+    const whatsAppPhone = siteSettings?.contact_whatsapp || '';
 
     const formatPrice = (price: number) => {
         return new Intl.NumberFormat('id-ID', {

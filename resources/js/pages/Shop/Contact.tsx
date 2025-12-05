@@ -1,17 +1,13 @@
-import { useForm } from '@inertiajs/react';
+import { useForm, usePage } from '@inertiajs/react';
 import { MapPin, Phone, Mail, Clock, Send, CheckCircle, MessageCircle } from 'lucide-react';
 import { useState } from 'react';
 import { ShopLayout } from '@/layouts/ShopLayout';
 import { SEOHead } from '@/components/seo';
-
-const CONTACT_INFO = [
-    { icon: MapPin, title: 'Alamat', lines: ['Jl. Furniture Indah No. 123', 'Jepara, Jawa Tengah 59411'] },
-    { icon: Phone, title: 'Telepon', lines: ['+62 812-3456-7890', '+62 291-123-4567'] },
-    { icon: Mail, title: 'Email', lines: ['hello@latifliving.com', 'support@latifliving.com'] },
-    { icon: Clock, title: 'Jam Operasional', lines: ['Senin - Sabtu: 08:00 - 17:00', 'Minggu: 09:00 - 15:00'] },
-];
+import { SiteSettings } from '@/types';
 
 export default function Contact() {
+    const { siteSettings } = usePage<{ siteSettings: SiteSettings }>().props;
+    const siteName = siteSettings?.site_name || 'Latif Living';
     const [isSuccess, setIsSuccess] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -23,6 +19,30 @@ export default function Contact() {
         message: '',
     });
 
+    // Build contact info from settings
+    const contactInfo = [
+        {
+            icon: MapPin,
+            title: 'Alamat',
+            lines: siteSettings?.address ? [siteSettings.address] : ['Alamat belum diatur']
+        },
+        {
+            icon: Phone,
+            title: 'Telepon',
+            lines: siteSettings?.contact_phone ? [siteSettings.contact_phone] : ['Telepon belum diatur']
+        },
+        {
+            icon: Mail,
+            title: 'Email',
+            lines: siteSettings?.contact_email ? [siteSettings.contact_email] : ['Email belum diatur']
+        },
+        {
+            icon: Clock,
+            title: 'Jam Operasional',
+            lines: ['Senin - Sabtu: 08:00 - 17:00', 'Minggu: 09:00 - 15:00']
+        },
+    ];
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
@@ -33,12 +53,15 @@ export default function Contact() {
         }, 1500);
     };
 
+    // Build SEO description from settings
+    const seoDescription = `Hubungi ${siteSettings?.site_name || 'kami'} untuk pertanyaan, pemesanan, atau konsultasi furnitur.${siteSettings?.address ? ` Alamat: ${siteSettings.address}.` : ''}${siteSettings?.contact_phone ? ` Telepon: ${siteSettings.contact_phone}.` : ''}${siteSettings?.contact_email ? ` Email: ${siteSettings.contact_email}` : ''}`;
+
     return (
         <>
             <SEOHead
                 title="Kontak Kami"
-                description="Hubungi Latif Living untuk pertanyaan, pemesanan, atau konsultasi furnitur. Alamat: Jl. Furniture Indah No. 123, Jepara. Telepon: +62 812-3456-7890. Email: hello@latifliving.com"
-                keywords={['kontak latif living', 'alamat toko furnitur', 'telepon latif living', 'email latif living']}
+                description={seoDescription}
+                keywords={['kontak', 'alamat toko furnitur', 'telepon', 'email']}
             />
             <div className="bg-noise" />
             <ShopLayout>
@@ -57,7 +80,7 @@ export default function Contact() {
                         <div className="lg:col-span-1">
                             <h2 className="font-serif text-2xl text-terra-900 mb-6">Informasi Kontak</h2>
                             <div className="space-y-6">
-                                {CONTACT_INFO.map((info, i) => (
+                                {contactInfo.map((info, i) => (
                                     <div key={i} className="flex gap-4">
                                         <div className="w-12 h-12 bg-wood/10 rounded-xl flex items-center justify-center flex-shrink-0">
                                             <info.icon size={24} className="text-wood-dark" />
@@ -73,14 +96,16 @@ export default function Contact() {
                             </div>
 
                             {/* Quick Contact */}
-                            <div className="mt-8 p-6 bg-terra-900 rounded-2xl text-white">
-                                <h3 className="font-medium mb-3">Butuh Respon Cepat?</h3>
-                                <p className="text-sm opacity-80 mb-4">Hubungi kami via WhatsApp untuk respon lebih cepat</p>
-                                <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 bg-wood hover:bg-wood-dark w-full py-3 rounded-xl transition-colors">
-                                    <MessageCircle size={20} />
-                                    <span>Chat WhatsApp</span>
-                                </a>
-                            </div>
+                            {siteSettings?.contact_whatsapp && (
+                                <div className="mt-8 p-6 bg-terra-900 rounded-2xl text-white">
+                                    <h3 className="font-medium mb-3">Butuh Respon Cepat?</h3>
+                                    <p className="text-sm opacity-80 mb-4">Hubungi kami via WhatsApp untuk respon lebih cepat</p>
+                                    <a href={`https://wa.me/${siteSettings.contact_whatsapp}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 bg-wood hover:bg-wood-dark w-full py-3 rounded-xl transition-colors">
+                                        <MessageCircle size={20} />
+                                        <span>Chat WhatsApp</span>
+                                    </a>
+                                </div>
+                            )}
                         </div>
 
                         {/* Contact Form */}
@@ -146,7 +171,7 @@ export default function Contact() {
                     <div className="mt-16">
                         <h2 className="font-serif text-2xl text-terra-900 mb-6">Lokasi Kami</h2>
                         <div className="aspect-[21/9] rounded-2xl overflow-hidden bg-terra-200">
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126646.19650689476!2d110.5944!3d-6.5877!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e711ef138b2f51d%3A0x40dfe5e29e55df0!2sJepara%2C%20Jepara%20Regency%2C%20Central%20Java!5e0!3m2!1sen!2sid!4v1699999999999!5m2!1sen!2sid" width="100%" height="100%" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" title="Lokasi Latif Living"></iframe>
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126646.19650689476!2d110.5944!3d-6.5877!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e711ef138b2f51d%3A0x40dfe5e29e55df0!2sJepara%2C%20Jepara%20Regency%2C%20Central%20Java!5e0!3m2!1sen!2sid!4v1699999999999!5m2!1sen!2sid" width="100%" height="100%" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" title={`Lokasi ${siteName}`}></iframe>
                         </div>
                     </div>
                 </div>

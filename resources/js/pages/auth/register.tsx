@@ -1,18 +1,22 @@
 import { login } from '@/routes';
 import { store } from '@/routes/register';
-import { Form, Head } from '@inertiajs/react';
+import { Form, Head, usePage } from '@inertiajs/react';
 
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 import AuthLayout from '@/layouts/auth-layout';
+import { SiteSettings } from '@/types';
 
 export default function Register() {
+    const { siteSettings } = usePage<{ siteSettings?: SiteSettings }>().props;
+    const siteName = siteSettings?.site_name || 'Latif Living';
+
     return (
         <AuthLayout
             title="Buat Akun Baru"
-            description="Daftar untuk mulai berbelanja di Latif Living"
+            description={`Daftar untuk mulai berbelanja di ${siteName}`}
         >
             <Head title="Daftar" />
             <Form

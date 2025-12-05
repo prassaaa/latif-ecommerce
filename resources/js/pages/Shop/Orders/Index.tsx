@@ -1,7 +1,8 @@
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { Package, ChevronRight, Clock, Truck, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 import { ShopLayout } from '@/layouts/ShopLayout';
 import { PaginatedResponse } from '@/types/shop';
+import { SiteSettings } from '@/types';
 
 interface OrderStatus {
     value: string;
@@ -46,9 +47,12 @@ const STATUS_ICONS: Record<string, React.ReactNode> = {
 };
 
 export default function OrdersIndex({ orders }: Props) {
+    const { siteSettings } = usePage<{ siteSettings?: SiteSettings }>().props;
+    const siteName = siteSettings?.site_name || 'Latif Living';
+
     return (
         <>
-            <Head title="Pesanan Saya - Latif Living" />
+            <Head title={`Pesanan Saya - ${siteName}`} />
             <div className="bg-noise" />
             <ShopLayout>
             <main className="min-h-screen bg-sand-50 pt-28 pb-20">

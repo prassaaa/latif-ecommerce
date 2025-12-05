@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import {
     LayoutDashboard,
     Package,
@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
+import { SiteSettings } from '@/types';
 
 interface NavItem {
     title: string;
@@ -42,6 +43,10 @@ export default function AdminSidebar() {
 
     // Get current URL path
     const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
+
+    // Get site settings
+    const { siteSettings } = usePage<{ siteSettings?: SiteSettings }>().props;
+    const siteName = siteSettings?.site_name || 'Latif Living';
 
     // Check if user has permission (simplified - will be enhanced later)
     const hasPermission = (permission?: string) => {
@@ -75,7 +80,7 @@ export default function AdminSidebar() {
                     <Link href="/admin" className="flex items-center gap-3">
                         <img
                             src="/assets/images/logo.webp"
-                            alt="Latif Living"
+                            alt={siteName}
                             className={cn(
                                 'h-8 w-auto object-contain brightness-0 invert transition-all',
                                 collapsed && 'h-10'

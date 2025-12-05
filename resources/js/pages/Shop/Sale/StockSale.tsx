@@ -1,9 +1,10 @@
-import { Link, router } from '@inertiajs/react';
+import { Link, router, usePage } from '@inertiajs/react';
 import { Package, Filter, ChevronDown, Star, Warehouse } from 'lucide-react';
 import { useState } from 'react';
 import { ShopLayout } from '@/layouts/ShopLayout';
 import { SEOHead } from '@/components/seo';
 import { ApiProduct, ApiCategory, PaginatedResponse } from '@/types/shop';
+import { SiteSettings } from '@/types';
 
 interface Props {
     products: PaginatedResponse<ApiProduct>;
@@ -12,6 +13,8 @@ interface Props {
 }
 
 export default function StockSale({ products, categories, filters }: Props) {
+    const { siteSettings } = usePage<{ siteSettings?: SiteSettings }>().props;
+    const siteName = siteSettings?.site_name || 'Latif Living';
     const safeFilters = Array.isArray(filters) ? {} : filters;
     const [showFilters, setShowFilters] = useState(false);
 
@@ -33,7 +36,7 @@ export default function StockSale({ products, categories, filters }: Props) {
         <>
             <SEOHead
                 title="Stock Sale - Harga Pabrik"
-                description="Stock Sale Latif Living! Beli furnitur langsung dari pabrik dengan harga grosir. Cocok untuk reseller, kontraktor, dan pembelian dalam jumlah besar."
+                description={`Stock Sale ${siteName}! Beli furnitur langsung dari pabrik dengan harga grosir. Cocok untuk reseller, kontraktor, dan pembelian dalam jumlah besar.`}
                 keywords={['stock sale', 'harga pabrik', 'grosir furnitur', 'harga grosir mebel', 'reseller furniture']}
             />
             <div className="bg-noise" />

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link, router } from '@inertiajs/react';
+import { Link, router, usePage } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import {
     Search, SlidersHorizontal, Grid3X3, LayoutList, X,
@@ -9,6 +9,7 @@ import { QuickViewModal } from '@/components/shop';
 import { ShopLayout } from '@/layouts/ShopLayout';
 import { SEOHead, BreadcrumbStructuredData } from '@/components/seo';
 import { ApiProduct, ApiCategory, PaginatedResponse, ProductFilters } from '@/types/shop';
+import { SiteSettings } from '@/types';
 
 interface Props {
     products: PaginatedResponse<ApiProduct>;
@@ -34,6 +35,8 @@ const PRICE_RANGES = [
 ];
 
 export default function ProductsIndex({ products, categories, currentCategory, filters }: Props) {
+    const { siteSettings } = usePage<{ siteSettings?: SiteSettings }>().props;
+    const siteName = siteSettings?.site_name || 'Latif Living';
     const safeFilters = Array.isArray(filters) ? {} : filters;
 
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -83,8 +86,8 @@ export default function ProductsIndex({ products, categories, currentCategory, f
     // SEO Data
     const pageTitle = currentCategory ? currentCategory.name : 'Semua Produk';
     const pageDescription = currentCategory
-        ? `Koleksi ${currentCategory.name} berkualitas tinggi di Latif Living. Temukan berbagai pilihan ${currentCategory.name?.toLowerCase() || ''} dengan harga terbaik.`
-        : 'Jelajahi koleksi lengkap furnitur berkualitas di Latif Living. Kursi, meja, lemari, dan berbagai furnitur lainnya dengan harga terjangkau.';
+        ? `Koleksi ${currentCategory.name} berkualitas tinggi di ${siteName}. Temukan berbagai pilihan ${currentCategory.name?.toLowerCase() || ''} dengan harga terbaik.`
+        : `Jelajahi koleksi lengkap furnitur berkualitas di ${siteName}. Kursi, meja, lemari, dan berbagai furnitur lainnya dengan harga terjangkau.`;
     const breadcrumbItems = [
         { name: 'Beranda', url: typeof window !== 'undefined' ? `${window.location.origin}/shop` : '/shop' },
         ...(currentCategory
@@ -99,8 +102,8 @@ export default function ProductsIndex({ products, categories, currentCategory, f
                 title={pageTitle}
                 description={pageDescription}
                 keywords={currentCategory
-                    ? [currentCategory.name, 'furnitur', 'latif living', 'mebel']
-                    : ['furnitur', 'furniture', 'mebel', 'latif living', 'kursi', 'meja', 'lemari']
+                    ? [currentCategory.name, 'furnitur', 'mebel']
+                    : ['furnitur', 'furniture', 'mebel', 'kursi', 'meja', 'lemari']
                 }
             />
             <BreadcrumbStructuredData items={breadcrumbItems} />

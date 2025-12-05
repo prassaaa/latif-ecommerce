@@ -1,8 +1,11 @@
 import { useState } from 'react';
-import { useForm } from '@inertiajs/react';
+import { useForm, usePage } from '@inertiajs/react';
 import { Mail, CheckCircle, Loader2 } from 'lucide-react';
+import { SiteSettings } from '@/types';
 
 export const NewsletterSection = () => {
+    const { siteSettings } = usePage<{ siteSettings?: SiteSettings }>().props;
+    const siteName = siteSettings?.site_name || 'Latif Living';
     const [isSuccess, setIsSuccess] = useState(false);
     const [message, setMessage] = useState('');
 
@@ -38,7 +41,7 @@ export const NewsletterSection = () => {
             <div className="max-w-[1400px] mx-auto">
                 <div className="bg-sand-100 rounded-[40px] p-12 md:p-20 flex flex-col md:flex-row items-center justify-between gap-12">
                     <div className="max-w-xl">
-                        <h2 className="font-serif text-5xl text-terra-900">Bergabung dengan Keluarga Latif</h2>
+                        <h2 className="font-serif text-5xl text-terra-900">Bergabung dengan Keluarga {siteName}</h2>
                         <p className="text-terra-600 mt-4 text-lg">Dapatkan akses eksklusif ke koleksi terbaru, tips dekorasi, dan penawaran khusus.</p>
                     </div>
                     <div className="w-full md:w-auto">

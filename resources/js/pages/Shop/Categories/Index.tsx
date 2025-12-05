@@ -1,9 +1,10 @@
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { ShopLayout } from '@/layouts/ShopLayout';
 import { SEOHead } from '@/components/seo';
 import { ApiCategory } from '@/types/shop';
+import { SiteSettings } from '@/types';
 
 interface Props {
     categories: ApiCategory[] | { data: ApiCategory[] };
@@ -13,13 +14,15 @@ interface Props {
 const PLACEHOLDER_CATEGORY = '/images/placeholder-category.svg';
 
 export default function CategoriesIndex({ categories }: Props) {
+    const { siteSettings } = usePage<{ siteSettings?: SiteSettings }>().props;
+    const siteName = siteSettings?.site_name || 'Latif Living';
     const categoriesList = Array.isArray(categories) ? categories : categories.data;
 
     return (
         <>
             <SEOHead
                 title="Kategori Produk"
-                description="Jelajahi kategori furnitur Latif Living. Temukan koleksi untuk ruang tamu, ruang makan, kamar tidur, kantor, outdoor, dan lainnya."
+                description={`Jelajahi kategori furnitur ${siteName}. Temukan koleksi untuk ruang tamu, ruang makan, kamar tidur, kantor, outdoor, dan lainnya.`}
                 keywords={['kategori furnitur', 'ruang tamu', 'ruang makan', 'kamar tidur', 'furnitur kantor', 'outdoor furniture']}
             />
             <div className="bg-noise" />

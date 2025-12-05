@@ -220,7 +220,7 @@ export interface HomeTestimonial {
     location: string;
 }
 
-export interface SiteSettings {
+export interface HomeSiteSettings {
     name: string;
     description: string;
     phone: string;
@@ -236,6 +236,6 @@ export interface HomePageProps {
     heroSettings: HeroSettings;
     trustLogos: string[];
     values: HomeValue[];
-    siteSettings: SiteSettings;
+    siteSettings: HomeSiteSettings;
 }
 

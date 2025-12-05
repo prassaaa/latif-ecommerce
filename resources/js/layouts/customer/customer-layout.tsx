@@ -1,7 +1,7 @@
 import { Link, usePage } from '@inertiajs/react';
 import { Package, Heart, MapPin, User, LogOut, ShoppingBag, Home, ChevronRight } from 'lucide-react';
 import { ReactNode } from 'react';
-import { SharedData } from '@/types';
+import { SharedData, SiteSettings } from '@/types';
 
 interface CustomerLayoutProps {
     children: ReactNode;
@@ -26,6 +26,9 @@ export default function CustomerLayout({ children, title }: CustomerLayoutProps)
     const { auth } = usePage<SharedData>().props;
     const currentPath = window.location.pathname;
 
+    const { siteSettings } = usePage<{ siteSettings?: SiteSettings }>().props;
+    const siteName = siteSettings?.site_name || 'Latif Living';
+
     const isActive = (href: string) => {
         if (href === '/dashboard') {
             return currentPath === '/dashboard';
@@ -43,7 +46,7 @@ export default function CustomerLayout({ children, title }: CustomerLayoutProps)
                             <div className="w-10 h-10 bg-terra-900 rounded-xl flex items-center justify-center">
                                 <ShoppingBag className="w-5 h-5 text-white" />
                             </div>
-                            <span className="text-xl font-bold text-terra-900">Latif Living</span>
+                            <span className="text-xl font-bold text-terra-900">{siteName}</span>
                         </Link>
                         <div className="flex items-center gap-4">
                             <span className="text-sm text-terra-600">Halo, {auth.user.name}</span>

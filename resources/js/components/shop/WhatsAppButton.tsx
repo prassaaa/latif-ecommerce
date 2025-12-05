@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, MessageCircle } from 'lucide-react';
+import { usePage } from '@inertiajs/react';
+import { SiteSettings } from '@/types';
 
 interface WhatsAppButtonProps {
     phoneNumber: string; // Format: 628123456789 (without +)
@@ -20,17 +22,25 @@ function WhatsAppIcon({ size = 24 }: { size?: number }) {
 
 export function WhatsAppButton({
     phoneNumber,
-    message = 'Halo, saya tertarik dengan produk di Latif Living',
+    message,
     position = 'bottom-right',
     showTooltip = true,
 }: WhatsAppButtonProps) {
     const [isTooltipVisible, setIsTooltipVisible] = useState(false);
     const [showChat, setShowChat] = useState(false);
+    const { siteSettings } = usePage<{ siteSettings: SiteSettings }>().props;
+    const siteName = siteSettings?.site_name || 'Latif Living';
+    const defaultMessage = message || `Halo, saya tertarik dengan produk di ${siteName}`;
 
     const positionClasses = position === 'bottom-right' ? 'right-6' : 'left-6';
 
+    // Don't render if no phone number
+    if (!phoneNumber) {
+        return null;
+    }
+
     const handleClick = () => {
-        const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+        const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(defaultMessage)}`;
         window.open(url, '_blank');
     };
 
@@ -51,7 +61,7 @@ export function WhatsAppButton({
                                     <WhatsAppIcon size={20} />
                                 </div>
                                 <div>
-                                    <div className="font-medium">Latif Living</div>
+                                    <div className="font-medium">{siteName}</div>
                                     <div className="text-xs opacity-80">Biasanya membalas dalam 1 jam</div>
                                 </div>
                             </div>

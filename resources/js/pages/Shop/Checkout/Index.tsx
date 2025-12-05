@@ -1,6 +1,7 @@
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import { MapPin, CreditCard, Truck, Plus, Check, ArrowLeft, Loader2, Package, Banknote, Building2 } from 'lucide-react';
 import { ShopLayout } from '@/layouts/ShopLayout';
+import { SiteSettings } from '@/types';
 
 interface Address {
     id: number;
@@ -58,6 +59,9 @@ export default function CheckoutIndex({ cart, addresses, paymentMethods, payment
     const addressList = Array.isArray(addresses) ? addresses : [];
     const paymentList = Array.isArray(paymentMethods) ? paymentMethods : [];
 
+    const { siteSettings } = usePage<{ siteSettings?: SiteSettings }>().props;
+    const siteName = siteSettings?.site_name || 'Latif Living';
+
     // Ensure cart has items array
     const safeCart: Cart = {
         items_count: cart?.items_count || 0,
@@ -92,7 +96,7 @@ export default function CheckoutIndex({ cart, addresses, paymentMethods, payment
 
     return (
         <>
-            <Head title="Checkout - Latif Living" />
+            <Head title={`Checkout - ${siteName}`} />
             <div className="bg-noise" />
             <ShopLayout>
             <main className="min-h-screen bg-sand-50 pt-28 pb-20">

@@ -3,6 +3,7 @@ import { Link, usePage, router } from '@inertiajs/react';
 import { ShoppingBag, Search, Menu, Heart, User, LogOut, Package, Settings, ChevronDown, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { NAV_ITEMS } from '@/data/constants';
+import { SiteSettings } from '@/types';
 
 interface AuthUser {
     id: number;
@@ -19,7 +20,8 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ cartCount, onCartClick, onLogoClick, bannerVisible = false }) => {
-    const { auth, wishlistCount } = usePage().props as { auth?: { user?: AuthUser }; wishlistCount?: number };
+    const { auth, wishlistCount, siteSettings } = usePage<{ auth?: { user?: AuthUser }; wishlistCount?: number; siteSettings?: SiteSettings }>().props;
+    const siteName = siteSettings?.site_name || 'Latif Living';
     const user = auth?.user;
 
     const [scrolled, setScrolled] = useState(false);
@@ -91,7 +93,7 @@ export const Header: React.FC<HeaderProps> = ({ cartCount, onCartClick, onLogoCl
                     <div className="flex items-center cursor-pointer group" onClick={onLogoClick}>
                         <img
                             src="/assets/images/logo.webp"
-                            alt="Latif Living"
+                            alt={siteName}
                             className="h-7 md:h-8 w-auto object-contain"
                         />
                     </div>

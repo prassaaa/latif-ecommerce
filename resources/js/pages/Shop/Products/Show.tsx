@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
-import { Link, router } from '@inertiajs/react';
+import { Link, router, usePage } from '@inertiajs/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Star, Heart, ShoppingBag, Minus, Plus, ChevronLeft, ChevronRight,
     Truck, Shield, RotateCcw, Check, Share2, ZoomIn, X, Loader2
 } from 'lucide-react';
-import { RecentlyViewedSection, saveToRecentlyViewed, WhatsAppButton, ShareModal } from '@/components/shop';
+import { RecentlyViewedSection, saveToRecentlyViewed, ShareModal } from '@/components/shop';
 import { ShopLayout } from '@/layouts/ShopLayout';
 import { SEOHead, ProductStructuredData, BreadcrumbStructuredData } from '@/components/seo';
 import { ApiProduct, ProductImage } from '@/types/shop';
+import { SiteSettings } from '@/types';
 
 interface Props {
     product: ApiProduct;
@@ -16,6 +17,8 @@ interface Props {
 }
 
 export default function ProductShow({ product, relatedProducts }: Props) {
+    const { siteSettings } = usePage<{ siteSettings?: SiteSettings }>().props;
+    const siteName = siteSettings?.site_name || 'Latif Living';
     const [quantity, setQuantity] = useState(1);
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
     const [isZoomed, setIsZoomed] = useState(false);
@@ -77,8 +80,8 @@ export default function ProductShow({ product, relatedProducts }: Props) {
             {/* SEO */}
             <SEOHead
                 title={product.name}
-                description={product.short_description || product.description?.replace(/<[^>]*>/g, '').substring(0, 160) || `Beli ${product.name} dengan harga terbaik di Latif Living`}
-                keywords={[product.name, product.category?.name || 'furnitur', 'latif living', product.sku].filter(Boolean) as string[]}
+                description={product.short_description || product.description?.replace(/<[^>]*>/g, '').substring(0, 160) || `Beli ${product.name} dengan harga terbaik di ${siteName}`}
+                keywords={[product.name, product.category?.name || 'furnitur', product.sku].filter(Boolean) as string[]}
                 image={images[0]?.image_url}
                 url={productUrl}
                 type="product"
@@ -86,7 +89,7 @@ export default function ProductShow({ product, relatedProducts }: Props) {
                     price: product.final_price,
                     currency: 'IDR',
                     availability: product.is_in_stock ? 'in stock' : 'out of stock',
-                    brand: 'Latif Living',
+                    brand: siteName,
                     category: product.category?.name,
                     sku: product.sku,
                 }}
@@ -97,7 +100,7 @@ export default function ProductShow({ product, relatedProducts }: Props) {
                     description: product.short_description || product.description?.replace(/<[^>]*>/g, '') || '',
                     image: productImages,
                     sku: product.sku,
-                    brand: 'Latif Living',
+                    brand: siteName,
                     category: product.category?.name,
                     price: product.final_price,
                     priceCurrency: 'IDR',
@@ -162,11 +165,6 @@ export default function ProductShow({ product, relatedProducts }: Props) {
                 imageUrl={images[0]?.image_url}
             />
 
-            {/* WhatsApp Button */}
-            <WhatsAppButton
-                phoneNumber="6281234567890"
-                message={`Halo, saya tertarik dengan produk ${product.name}`}
-            />
             </ShopLayout>
         </>
     );

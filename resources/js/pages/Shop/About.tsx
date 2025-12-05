@@ -1,6 +1,8 @@
 import { Award, Users, Leaf, Heart, Target, Clock } from 'lucide-react';
 import { ShopLayout } from '@/layouts/ShopLayout';
 import { SEOHead } from '@/components/seo';
+import { usePage } from '@inertiajs/react';
+import { SiteSettings } from '@/types';
 
 const VALUES = [
     { icon: Award, title: 'Kualitas Premium', desc: 'Material terbaik dengan standar produksi tinggi' },
@@ -17,12 +19,15 @@ const MILESTONES = [
 ];
 
 export default function About() {
+    const { siteSettings } = usePage<{ siteSettings?: SiteSettings }>().props;
+    const siteName = siteSettings?.site_name || 'Latif Living';
+
     return (
         <>
             <SEOHead
                 title="Tentang Kami"
-                description="Latif Living - Toko furnitur premium Indonesia sejak 2010. Menghadirkan furniture berkualitas tinggi dengan sentuhan seni untuk hunian modern Indonesia. Pengrajin berpengalaman dari Jepara."
-                keywords={['tentang latif living', 'furnitur jepara', 'mebel indonesia', 'furniture premium', 'pengrajin mebel']}
+                description={`${siteName} - Toko furnitur premium Indonesia sejak 2010. Menghadirkan furniture berkualitas tinggi dengan sentuhan seni untuk hunian modern Indonesia. Pengrajin berpengalaman dari Jepara.`}
+                keywords={['tentang kami', 'furnitur jepara', 'mebel indonesia', 'furniture premium', 'pengrajin mebel']}
             />
             <div className="bg-noise" />
             <ShopLayout>
@@ -30,7 +35,7 @@ export default function About() {
                 {/* Hero */}
                 <div className="bg-gradient-to-r from-terra-800 to-terra-900 text-white py-20 mb-16">
                     <div className="max-w-[1400px] mx-auto px-6 md:px-12 text-center">
-                        <h1 className="font-serif text-4xl md:text-5xl font-bold mb-4">Tentang Latif Living</h1>
+                        <h1 className="font-serif text-4xl md:text-5xl font-bold mb-4">Tentang {siteName}</h1>
                         <p className="text-xl opacity-90 max-w-2xl mx-auto">
                             Menghadirkan furniture berkualitas tinggi dengan sentuhan seni untuk hunian modern Indonesia
                         </p>
@@ -44,7 +49,7 @@ export default function About() {
                             <h2 className="font-serif text-3xl text-terra-900 mb-6">Cerita Kami</h2>
                             <div className="space-y-4 text-terra-600 leading-relaxed">
                                 <p>
-                                    <strong className="text-terra-900">Latif Living</strong> lahir dari passion terhadap seni furniture dan
+                                    <strong className="text-terra-900">{siteName}</strong> lahir dari passion terhadap seni furniture dan
                                     keinginan untuk menghadirkan produk berkualitas tinggi yang dapat dijangkau oleh keluarga Indonesia.
                                 </p>
                                 <p>
@@ -52,7 +57,7 @@ export default function About() {
                                     kami tumbuh menjadi brand furniture terpercaya yang melayani pelanggan di seluruh Indonesia.
                                 </p>
                                 <p>
-                                    Setiap produk Latif Living dibuat dengan teliti oleh pengrajin berpengalaman,
+                                    Setiap produk {siteName} dibuat dengan teliti oleh pengrajin berpengalaman,
                                     menggunakan material pilihan dan proses quality control yang ketat.
                                 </p>
                             </div>

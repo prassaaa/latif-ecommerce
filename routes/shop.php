@@ -56,6 +56,11 @@ Route::prefix('shop')->name('shop.')->middleware('share.cart')->group(function (
     // Static Pages
     Route::get('/about', fn() => \Inertia\Inertia::render('Shop/About'))->name('about');
     Route::get('/contact', fn() => \Inertia\Inertia::render('Shop/Contact'))->name('contact');
+    Route::get('/faq', fn() => \Inertia\Inertia::render('Shop/FAQ'))->name('faq');
+    Route::get('/privacy-policy', fn() => \Inertia\Inertia::render('Shop/PrivacyPolicy'))->name('privacy');
+    Route::get('/terms', fn() => \Inertia\Inertia::render('Shop/Terms'))->name('terms');
+    Route::get('/shipping-policy', fn() => \Inertia\Inertia::render('Shop/ShippingPolicy'))->name('shipping');
+    Route::get('/return-policy', fn() => \Inertia\Inertia::render('Shop/ReturnPolicy'))->name('returns');
 
     // Compare Products
     Route::get('/compare', [ProductController::class, 'compare'])->name('products.compare');

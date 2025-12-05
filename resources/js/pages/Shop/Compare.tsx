@@ -1,15 +1,18 @@
 import { useState } from 'react';
-import { Link, router } from '@inertiajs/react';
+import { Link, router, usePage } from '@inertiajs/react';
 import { GitCompare, Star, ShoppingBag, X, ArrowLeft, Check, Minus, Loader2 } from 'lucide-react';
 import { ShopLayout } from '@/layouts/ShopLayout';
 import { SEOHead } from '@/components/seo';
 import { ApiProduct } from '@/types/shop';
+import { SiteSettings } from '@/types';
 
 interface Props {
     products: ApiProduct[];
 }
 
 export default function Compare({ products }: Props) {
+    const { siteSettings } = usePage<{ siteSettings?: SiteSettings }>().props;
+    const siteName = siteSettings?.site_name || 'Latif Living';
     const [addingToCart, setAddingToCart] = useState<number | null>(null);
     const [cartSuccess, setCartSuccess] = useState<number | null>(null);
 
@@ -53,7 +56,7 @@ export default function Compare({ products }: Props) {
         <>
             <SEOHead
                 title="Bandingkan Produk"
-                description="Bandingkan spesifikasi dan harga produk furnitur di Latif Living. Pilih produk terbaik sesuai kebutuhan Anda."
+                description={`Bandingkan spesifikasi dan harga produk furnitur di ${siteName}. Pilih produk terbaik sesuai kebutuhan Anda.`}
                 noindex={true}
             />
             <div className="bg-noise" />

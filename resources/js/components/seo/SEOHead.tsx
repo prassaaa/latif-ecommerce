@@ -1,4 +1,5 @@
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
+import { SiteSettings } from '@/types';
 
 export interface SEOProps {
     title: string;
@@ -34,30 +35,33 @@ export interface SEOProps {
     canonical?: string;
 }
 
-const DEFAULT_SITE_NAME = 'Latif Living';
 const DEFAULT_LOCALE = 'id_ID';
 const DEFAULT_IMAGE = '/images/og-default.jpg';
-const DEFAULT_DESCRIPTION = 'Latif Living - Furnitur Berkualitas dengan Harga Terjangkau. Temukan koleksi kursi, meja, lemari, dan furnitur custom terbaik.';
 
 export const SEOHead: React.FC<SEOProps> = ({
     title,
-    description = DEFAULT_DESCRIPTION,
-    keywords = ['furnitur', 'furniture', 'mebel', 'latif living', 'kursi', 'meja', 'lemari'],
+    description,
+    keywords = ['furnitur', 'furniture', 'mebel', 'kursi', 'meja', 'lemari'],
     image = DEFAULT_IMAGE,
     url,
     type = 'website',
-    siteName = DEFAULT_SITE_NAME,
+    siteName,
     locale = DEFAULT_LOCALE,
     product,
     article,
     twitterCard = 'summary_large_image',
-    twitterSite = '@latifliving',
+    twitterSite,
     noindex = false,
     nofollow = false,
     canonical,
 }) => {
-    const safeTitle = title || 'Latif Living';
-    const fullTitle = safeTitle.includes(siteName) ? safeTitle : `${safeTitle} | ${siteName}`;
+    const { siteSettings } = usePage<{ siteSettings?: SiteSettings }>().props;
+
+    // Use site settings as defaults
+    const resolvedSiteName = siteName || siteSettings?.site_name || 'Latif Living';
+    const resolvedDescription = description || siteSettings?.site_description || `${resolvedSiteName} - Furnitur Berkualitas dengan Harga Terjangkau. Temukan koleksi kursi, meja, lemari, dan furnitur custom terbaik.`;
+    const safeTitle = title || resolvedSiteName;
+    const fullTitle = safeTitle.includes(resolvedSiteName) ? safeTitle : `${safeTitle} | ${resolvedSiteName}`;
     const currentUrl = url || (typeof window !== 'undefined' ? window.location.href : '');
     const imageUrl = image?.startsWith('http') ? image : (typeof window !== 'undefined' ? `${window.location.origin}${image}` : image);
 
@@ -69,7 +73,7 @@ export const SEOHead: React.FC<SEOProps> = ({
     return (
         <Head>
             <title>{fullTitle}</title>
-            <meta name="description" content={description} />
+            <meta name="description" content={resolvedDescription} />
             <meta name="keywords" content={keywords.join(', ')} />
             <meta name="robots" content={robotsContent} />
 
@@ -80,16 +84,16 @@ export const SEOHead: React.FC<SEOProps> = ({
             <meta property="og:type" content={type} />
             <meta property="og:url" content={currentUrl} />
             <meta property="og:title" content={fullTitle} />
-            <meta property="og:description" content={description} />
+            <meta property="og:description" content={resolvedDescription} />
             <meta property="og:image" content={imageUrl} />
-            <meta property="og:site_name" content={siteName} />
+            <meta property="og:site_name" content={resolvedSiteName} />
             <meta property="og:locale" content={locale} />
 
             {/* Twitter Card */}
             <meta name="twitter:card" content={twitterCard} />
-            <meta name="twitter:site" content={twitterSite} />
+            {twitterSite && <meta name="twitter:site" content={twitterSite} />}
             <meta name="twitter:title" content={fullTitle} />
-            <meta name="twitter:description" content={description} />
+            <meta name="twitter:description" content={resolvedDescription} />
             <meta name="twitter:image" content={imageUrl} />
 
             {/* Product specific Open Graph */}

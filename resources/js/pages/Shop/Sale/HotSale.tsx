@@ -1,10 +1,11 @@
-import { Link, router } from '@inertiajs/react';
+import { Link, router, usePage } from '@inertiajs/react';
 import { Flame, Filter, ChevronDown, Star } from 'lucide-react';
 import { useState } from 'react';
 import { FlashSaleCountdown } from '@/components/shop';
 import { ShopLayout } from '@/layouts/ShopLayout';
 import { SEOHead } from '@/components/seo';
 import { ApiProduct, ApiCategory, PaginatedResponse } from '@/types/shop';
+import { SiteSettings } from '@/types';
 
 // Calculate end date outside component to avoid impure function in render
 const SALE_END_DATE = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000);
@@ -16,6 +17,8 @@ interface Props {
 }
 
 export default function HotSale({ products, categories, filters }: Props) {
+    const { siteSettings } = usePage<{ siteSettings?: SiteSettings }>().props;
+    const siteName = siteSettings?.site_name || 'Latif Living';
     const safeFilters = Array.isArray(filters) ? {} : filters;
     const [showFilters, setShowFilters] = useState(false);
 
@@ -37,8 +40,8 @@ export default function HotSale({ products, categories, filters }: Props) {
         <>
             <SEOHead
                 title="Hot Sale - Diskon Besar"
-                description="Promo Hot Sale Latif Living! Dapatkan diskon hingga 50% untuk furnitur berkualitas. Penawaran terbatas, segera belanja sekarang!"
-                keywords={['hot sale', 'diskon furnitur', 'promo mebel', 'sale latif living', 'furnitur murah']}
+                description={`Promo Hot Sale ${siteName}! Dapatkan diskon hingga 50% untuk furnitur berkualitas. Penawaran terbatas, segera belanja sekarang!`}
+                keywords={['hot sale', 'diskon furnitur', 'promo mebel', 'furnitur murah']}
             />
             <div className="bg-noise" />
             <ShopLayout>

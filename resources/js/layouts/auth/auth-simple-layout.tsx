@@ -1,5 +1,6 @@
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { type PropsWithChildren } from 'react';
+import { SiteSettings } from '@/types';
 
 interface AuthLayoutProps {
     name?: string;
@@ -12,6 +13,10 @@ export default function AuthSimpleLayout({
     title,
     description,
 }: PropsWithChildren<AuthLayoutProps>) {
+    const { siteSettings } = usePage<{ siteSettings?: SiteSettings }>().props;
+    const siteName = siteSettings?.site_name || 'Latif Living';
+    const currentYear = new Date().getFullYear();
+
     return (
         <div className="min-h-svh flex">
             {/* Left Side - Branding */}
@@ -27,7 +32,7 @@ export default function AuthSimpleLayout({
                     <Link href="/shop" className="flex items-center">
                         <img
                             src="/assets/images/logo.webp"
-                            alt="Latif Living"
+                            alt={siteName}
                             className="h-8 w-auto brightness-0 invert"
                         />
                     </Link>
@@ -43,7 +48,7 @@ export default function AuthSimpleLayout({
                     </div>
 
                     <p className="text-terra-400 text-sm">
-                        &copy; 2025 Latif Living. Hak cipta dilindungi.
+                        &copy; {currentYear} {siteName}. Hak cipta dilindungi.
                     </p>
                 </div>
             </div>
@@ -55,7 +60,7 @@ export default function AuthSimpleLayout({
                     <Link href="/shop">
                         <img
                             src="/assets/images/logo.webp"
-                            alt="Latif Living"
+                            alt={siteName}
                             className="h-8 w-auto"
                         />
                     </Link>
@@ -73,7 +78,7 @@ export default function AuthSimpleLayout({
                     </div>
 
                     <p className="text-center text-terra-400 text-xs mt-6 lg:hidden">
-                        &copy; 2025 Latif Living. Hak cipta dilindungi.
+                        &copy; {currentYear} {siteName}. Hak cipta dilindungi.
                     </p>
                 </div>
             </div>

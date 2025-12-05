@@ -1,8 +1,10 @@
+import { usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import { HomePageProps } from '@/types/shop';
 import { ShopLayout } from '@/layouts/ShopLayout';
 import { LandingView, PromoBanner } from '@/components/shop';
 import { SEOHead, WebsiteStructuredData, OrganizationStructuredData } from '@/components/seo';
+import { SiteSettings } from '@/types';
 
 // --- Main App Component ---
 
@@ -13,48 +15,51 @@ export default function Home({
     heroSettings,
     trustLogos,
     values,
-    siteSettings,
+    siteSettings: pageSiteSettings,
 }: HomePageProps) {
     const [bannerVisible, setBannerVisible] = useState(false);
+    // Get shared siteSettings with contact info
+    const { siteSettings } = usePage<{ siteSettings: SiteSettings }>().props;
+    const siteName = siteSettings?.site_name || pageSiteSettings?.name || 'Latif Living';
 
     return (
         <>
             {/* SEO Head */}
             <SEOHead
                 title="Furniture Premium Berkualitas"
-                description={siteSettings.description || "Latif Living - Toko furnitur premium Indonesia. Temukan koleksi kursi, meja, lemari, dan furnitur custom berkualitas tinggi dengan harga terjangkau."}
-                keywords={['furnitur', 'furniture', 'mebel', 'latif living', 'kursi', 'meja', 'lemari', 'furnitur custom', 'furniture indonesia', 'mebel jepara']}
+                description={pageSiteSettings.description || `${siteName} - Toko furnitur premium Indonesia. Temukan koleksi kursi, meja, lemari, dan furnitur custom berkualitas tinggi dengan harga terjangkau.`}
+                keywords={['furnitur', 'furniture', 'mebel', 'kursi', 'meja', 'lemari', 'furnitur custom', 'furniture indonesia', 'mebel jepara']}
                 type="website"
             />
 
             {/* Structured Data */}
             <WebsiteStructuredData
                 data={{
-                    name: siteSettings.name,
+                    name: pageSiteSettings.name,
                     url: typeof window !== 'undefined' ? window.location.origin : '',
                     searchUrl: typeof window !== 'undefined' ? `${window.location.origin}/shop/products` : '',
                 }}
             />
             <OrganizationStructuredData
                 data={{
-                    name: siteSettings.name,
+                    name: pageSiteSettings.name,
                     url: typeof window !== 'undefined' ? window.location.origin : '',
                     logo: typeof window !== 'undefined' ? `${window.location.origin}/images/logo.png` : '',
-                    description: siteSettings.description,
-                    email: siteSettings.email || 'info@latifliving.com',
-                    phone: siteSettings.phone || '+6281234567890',
+                    description: pageSiteSettings.description,
+                    email: siteSettings?.contact_email || pageSiteSettings.email || '',
+                    phone: siteSettings?.contact_phone || pageSiteSettings.phone || '',
                     address: {
-                        street: siteSettings.address || 'Jl. Mebel No. 123',
+                        street: siteSettings?.address || pageSiteSettings.address || '',
                         city: 'Jepara',
                         region: 'Jawa Tengah',
                         postalCode: '59411',
                         country: 'ID',
                     },
                     socialMedia: [
-                        'https://www.facebook.com/latifliving',
-                        'https://www.instagram.com/latifliving',
-                        'https://www.twitter.com/latifliving',
-                    ],
+                        siteSettings?.facebook_url,
+                        siteSettings?.instagram_url,
+                        siteSettings?.tiktok_url,
+                    ].filter(Boolean) as string[],
                 }}
             />
 
@@ -67,8 +72,7 @@ export default function Home({
             <ShopLayout
                 showFooter={true}
                 showWhatsApp={true}
-                whatsAppPhone={siteSettings.whatsapp || "6281234567890"}
-                whatsAppMessage={`Halo, saya tertarik dengan produk di ${siteSettings.name}`}
+                whatsAppMessage={`Halo, saya tertarik dengan produk di ${siteSettings?.site_name || pageSiteSettings.name}`}
                 bannerVisible={bannerVisible}
             >
                 <main className="bg-white min-h-screen">

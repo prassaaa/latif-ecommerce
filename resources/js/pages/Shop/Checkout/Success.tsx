@@ -1,7 +1,8 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { CheckCircle, Package, ArrowRight, Home } from 'lucide-react';
 import { ShopLayout } from '@/layouts/ShopLayout';
 import { motion } from 'framer-motion';
+import { SiteSettings } from '@/types';
 
 interface Order {
     id: number;
@@ -22,9 +23,12 @@ interface Props {
 }
 
 export default function CheckoutSuccess({ order }: Props) {
+    const { siteSettings } = usePage<{ siteSettings?: SiteSettings }>().props;
+    const siteName = siteSettings?.site_name || 'Latif Living';
+
     return (
         <>
-            <Head title="Pesanan Berhasil - Latif Living" />
+            <Head title={`Pesanan Berhasil - ${siteName}`} />
             <div className="bg-noise" />
             <ShopLayout>
             <main className="min-h-screen bg-sand-50 pt-28 pb-20">
@@ -45,7 +49,7 @@ export default function CheckoutSuccess({ order }: Props) {
 
                         <h1 className="font-serif text-3xl text-terra-900 mb-3">Pesanan Berhasil!</h1>
                         <p className="text-terra-500 mb-8">
-                            Terima kasih telah berbelanja di Latif Living. Pesanan Anda sedang diproses.
+                            Terima kasih telah berbelanja di {siteName}. Pesanan Anda sedang diproses.
                         </p>
 
                         {order && (

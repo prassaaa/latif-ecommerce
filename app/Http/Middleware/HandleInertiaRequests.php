@@ -2,8 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Setting;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -49,6 +51,31 @@ class HandleInertiaRequests extends Middleware
             ],
             'wishlistCount' => $user ? $user->wishlists()->count() : 0,
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'siteSettings' => fn () => $this->getSiteSettings(),
         ];
+    }
+
+    /**
+     * Get site settings from cache or database.
+     *
+     * @return array<string, mixed>
+     */
+    private function getSiteSettings(): array
+    {
+        return Cache::remember('site_settings', 3600, function () {
+            $settings = Setting::all()->pluck('value', 'key')->toArray();
+
+            return [
+                'site_name' => $settings['site_name'] ?? 'Latif Living',
+                'site_description' => $settings['site_description'] ?? 'Toko furnitur premium Indonesia',
+                'contact_email' => $settings['contact_email'] ?? '',
+                'contact_phone' => $settings['contact_phone'] ?? '',
+                'contact_whatsapp' => $settings['contact_whatsapp'] ?? '',
+                'address' => $settings['address'] ?? '',
+                'facebook_url' => $settings['facebook_url'] ?? '',
+                'instagram_url' => $settings['instagram_url'] ?? '',
+                'tiktok_url' => $settings['tiktok_url'] ?? '',
+            ];
+        });
     }
 }

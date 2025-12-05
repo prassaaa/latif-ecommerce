@@ -1,7 +1,8 @@
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import { ArrowLeft, Package, MapPin, CreditCard, Truck, Clock, CheckCircle, XCircle, AlertCircle, Copy, MessageCircle, Building2, Banknote } from 'lucide-react';
 import { ShopLayout } from '@/layouts/ShopLayout';
 import { useState } from 'react';
+import { SiteSettings } from '@/types';
 
 interface OrderStatus {
     value: string;
@@ -73,6 +74,8 @@ const STATUS_ICONS: Record<string, React.ReactNode> = {
 };
 
 export default function OrderShow({ order, paymentSettings }: Props) {
+    const { siteSettings } = usePage<{ siteSettings?: SiteSettings }>().props;
+    const siteName = siteSettings?.site_name || 'Latif Living';
     const [cancelling, setCancelling] = useState(false);
     const [copied, setCopied] = useState(false);
 
@@ -104,9 +107,9 @@ export default function OrderShow({ order, paymentSettings }: Props) {
     // Generate WhatsApp message
     const generateWhatsAppMessage = () => {
         if (isBankTransfer) {
-            return `Halo Latif Living! 👋%0A%0ASaya sudah transfer untuk pesanan:%0A📦 Order: %23${order.order_number}%0A💰 Total: ${order.total_formatted}%0A🏦 Ke: ${paymentSettings.bank_name} ${paymentSettings.bank_account_number}%0A%0AMohon dikonfirmasi. Terima kasih! 🙏`;
+            return `Halo ${siteName}! 👋%0A%0ASaya sudah transfer untuk pesanan:%0A📦 Order: %23${order.order_number}%0A💰 Total: ${order.total_formatted}%0A🏦 Ke: ${paymentSettings.bank_name} ${paymentSettings.bank_account_number}%0A%0AMohon dikonfirmasi. Terima kasih! 🙏`;
         } else {
-            return `Halo Latif Living! 👋%0A%0ASaya mau konfirmasi pesanan COD:%0A📦 Order: %23${order.order_number}%0A💰 Total: ${order.total_formatted}%0A📍 Alamat: ${order.shipping_address}, ${order.shipping_city}%0A%0AMohon diproses. Terima kasih! 🙏`;
+            return `Halo ${siteName}! 👋%0A%0ASaya mau konfirmasi pesanan COD:%0A📦 Order: %23${order.order_number}%0A💰 Total: ${order.total_formatted}%0A📍 Alamat: ${order.shipping_address}, ${order.shipping_city}%0A%0AMohon diproses. Terima kasih! 🙏`;
         }
     };
 
@@ -116,7 +119,7 @@ export default function OrderShow({ order, paymentSettings }: Props) {
 
     return (
         <>
-            <Head title={`Pesanan #${order.order_number} - Latif Living`} />
+            <Head title={`Pesanan #${order.order_number} - ${siteName}`} />
             <div className="bg-noise" />
             <ShopLayout>
             <main className="min-h-screen bg-sand-50 pt-28 pb-20">

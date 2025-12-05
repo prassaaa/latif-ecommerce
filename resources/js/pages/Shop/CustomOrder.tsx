@@ -1,8 +1,9 @@
-import { useForm } from '@inertiajs/react';
+import { useForm, usePage } from '@inertiajs/react';
 import { Palette, Ruler, Upload, Send, CheckCircle, X } from 'lucide-react';
 import { useState, useRef } from 'react';
 import { ShopLayout } from '@/layouts/ShopLayout';
 import { SEOHead } from '@/components/seo';
+import { SiteSettings } from '@/types';
 
 const FURNITURE_TYPES = [
     'Kursi', 'Meja', 'Lemari', 'Sofa', 'Rak', 'Tempat Tidur', 'Meja TV', 'Nakas', 'Lainnya'
@@ -18,6 +19,8 @@ const MATERIALS = [
 ];
 
 export default function CustomOrder() {
+    const { siteSettings } = usePage<{ siteSettings?: SiteSettings }>().props;
+    const siteName = siteSettings?.site_name || 'Latif Living';
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [previewImages, setPreviewImages] = useState<string[]>([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -74,7 +77,7 @@ export default function CustomOrder() {
             <>
                 <SEOHead
                     title="Custom Order Berhasil"
-                    description="Permintaan custom order Anda telah terkirim. Tim Latif Living akan menghubungi Anda dalam 1-2 hari kerja."
+                    description={`Permintaan custom order Anda telah terkirim. Tim ${siteName} akan menghubungi Anda dalam 1-2 hari kerja.`}
                 />
                 <div className="bg-noise" />
                 <ShopLayout>
@@ -101,7 +104,7 @@ export default function CustomOrder() {
         <>
             <SEOHead
                 title="Custom Order - Pesan Furnitur Sesuai Keinginan"
-                description="Pesan furnitur custom sesuai keinginan Anda di Latif Living. Pilih material, ukuran, dan desain. Konsultasi gratis dengan tim ahli kami."
+                description={`Pesan furnitur custom sesuai keinginan Anda di ${siteName}. Pilih material, ukuran, dan desain. Konsultasi gratis dengan tim ahli kami.`}
                 keywords={['custom order', 'furnitur custom', 'pesan mebel', 'furniture custom jepara', 'desain furnitur']}
             />
             <div className="bg-noise" />
