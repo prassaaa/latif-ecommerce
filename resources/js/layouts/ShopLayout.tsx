@@ -180,21 +180,21 @@ export function ShopLayout({
                                                         {formatPrice(item.price)}
                                                     </p>
                                                     <div className="flex items-center gap-3 mt-2">
-                                                        <div className="flex items-center border border-terra-200 rounded-full">
+                                                        <div className="flex items-center border border-terra-200 rounded-full text-terra-900">
                                                             <button
                                                                 onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
                                                                 disabled={updatingItem === item.id || item.quantity <= 1}
-                                                                className="w-8 h-8 flex items-center justify-center hover:bg-terra-50 rounded-l-full disabled:opacity-50"
+                                                                className="w-8 h-8 flex items-center justify-center hover:bg-terra-50 rounded-l-full disabled:opacity-50 text-terra-900"
                                                             >
                                                                 <Minus size={14} />
                                                             </button>
-                                                            <span className="w-8 text-center text-sm font-medium">
+                                                            <span className="w-8 text-center text-sm font-medium text-terra-900">
                                                                 {item.quantity}
                                                             </span>
                                                             <button
                                                                 onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
                                                                 disabled={updatingItem === item.id}
-                                                                className="w-8 h-8 flex items-center justify-center hover:bg-terra-50 rounded-r-full disabled:opacity-50"
+                                                                className="w-8 h-8 flex items-center justify-center hover:bg-terra-50 rounded-r-full disabled:opacity-50 text-terra-900"
                                                             >
                                                                 <Plus size={14} />
                                                             </button>
