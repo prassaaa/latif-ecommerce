@@ -54,7 +54,7 @@ class CustomerController extends Controller
                 'province' => $customer->province,
                 'postal_code' => $customer->postal_code,
                 'orders_count' => $customer->orders()->count(),
-                'total_spent' => 'Rp ' . number_format($customer->orders()->sum('total'), 0, ',', '.'),
+                'total_spent' => 'Rp ' . number_format((float) $customer->orders()->sum('total'), 0, ',', '.'),
                 'created_at' => $customer->created_at->format('d M Y'),
                 'orders' => $customer->orders->map(fn ($order) => [
                     'id' => $order->id,
