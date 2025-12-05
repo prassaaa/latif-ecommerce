@@ -249,64 +249,91 @@ export default function OrderShow({ order, paymentSettings }: Props) {
 
                             {/* Bank Transfer Info */}
                             {needsPayment && isBankTransfer && paymentSettings?.bank_account_number && (
-                                <div className="bg-blue-50 rounded-2xl p-6 border border-blue-100">
-                                    <h2 className="font-medium text-blue-900 mb-4 flex items-center gap-2">
-                                        <Building2 size={18} />Transfer ke Rekening
-                                    </h2>
-                                    <div className="space-y-3">
-                                        <div className="bg-white rounded-xl p-4">
-                                            <p className="text-xs text-blue-600 mb-1">Bank</p>
-                                            <p className="font-semibold text-blue-900">{paymentSettings.bank_name}</p>
+                                <div className="bg-gradient-to-br from-terra-50 to-terra-100/50 rounded-2xl p-6 border border-terra-200 shadow-sm">
+                                    <div className="flex items-center gap-3 mb-5">
+                                        <div className="w-10 h-10 bg-terra-600 rounded-xl flex items-center justify-center">
+                                            <Building2 size={20} className="text-white" />
                                         </div>
-                                        <div className="bg-white rounded-xl p-4">
-                                            <p className="text-xs text-blue-600 mb-1">Nomor Rekening</p>
+                                        <div>
+                                            <h2 className="font-semibold text-terra-900">Transfer ke Rekening</h2>
+                                            <p className="text-xs text-terra-500">Selesaikan pembayaran Anda</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-3">
+                                        <div className="bg-white/80 backdrop-blur rounded-xl p-4 border border-terra-100">
+                                            <p className="text-xs text-terra-500 mb-1">Bank</p>
+                                            <p className="font-semibold text-terra-900">{paymentSettings.bank_name}</p>
+                                        </div>
+                                        <div className="bg-white/80 backdrop-blur rounded-xl p-4 border border-terra-100">
+                                            <p className="text-xs text-terra-500 mb-1">Nomor Rekening</p>
                                             <div className="flex items-center justify-between">
-                                                <p className="font-semibold text-blue-900 font-mono">{paymentSettings.bank_account_number}</p>
+                                                <p className="font-semibold text-terra-900 font-mono text-lg tracking-wider">{paymentSettings.bank_account_number}</p>
                                                 <button
                                                     onClick={() => copyToClipboard(paymentSettings.bank_account_number)}
-                                                    className="text-blue-600 hover:text-blue-800 p-1"
-                                                    title="Salin"
+                                                    className="text-terra-500 hover:text-terra-700 hover:bg-terra-100 p-2 rounded-lg transition-colors"
+                                                    title="Salin nomor rekening"
                                                 >
                                                     <Copy size={16} />
                                                 </button>
                                             </div>
                                         </div>
-                                        <div className="bg-white rounded-xl p-4">
-                                            <p className="text-xs text-blue-600 mb-1">Atas Nama</p>
-                                            <p className="font-semibold text-blue-900">{paymentSettings.bank_account_name}</p>
+                                        <div className="bg-white/80 backdrop-blur rounded-xl p-4 border border-terra-100">
+                                            <p className="text-xs text-terra-500 mb-1">Atas Nama</p>
+                                            <p className="font-semibold text-terra-900">{paymentSettings.bank_account_name}</p>
                                         </div>
-                                        <div className="bg-white rounded-xl p-4">
-                                            <p className="text-xs text-blue-600 mb-1">Jumlah Transfer</p>
+                                        <div className="bg-terra-600 rounded-xl p-4">
+                                            <p className="text-xs text-terra-200 mb-1">Total yang Harus Ditransfer</p>
                                             <div className="flex items-center justify-between">
-                                                <p className="font-bold text-xl text-blue-900">{order.total_formatted}</p>
+                                                <p className="font-bold text-2xl text-white">{order.total_formatted}</p>
                                                 <button
                                                     onClick={() => copyToClipboard(String(order.total || 0))}
-                                                    className="text-blue-600 hover:text-blue-800 p-1"
-                                                    title="Salin"
+                                                    className="text-terra-200 hover:text-white hover:bg-terra-500 p-2 rounded-lg transition-colors"
+                                                    title="Salin nominal"
                                                 >
                                                     <Copy size={16} />
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
-                                    <p className="text-xs text-blue-600 mt-4 text-center">
-                                        ⏰ Selesaikan pembayaran dalam {paymentSettings.payment_deadline_hours} jam
-                                    </p>
+
+                                    <div className="mt-4 flex items-center justify-center gap-2 text-terra-600 bg-white/60 rounded-xl py-3">
+                                        <Clock size={16} />
+                                        <p className="text-sm font-medium">
+                                            Batas waktu: <span className="text-terra-800">{paymentSettings.payment_deadline_hours} jam</span>
+                                        </p>
+                                    </div>
+
                                     {copied && (
-                                        <p className="text-xs text-green-600 mt-2 text-center">✓ Tersalin!</p>
+                                        <div className="mt-3 flex items-center justify-center gap-2 text-green-600 bg-green-50 rounded-xl py-2">
+                                            <CheckCircle size={16} />
+                                            <p className="text-sm font-medium">Tersalin ke clipboard!</p>
+                                        </div>
                                     )}
                                 </div>
                             )}
 
                             {/* COD Info */}
                             {needsPayment && isCOD && (
-                                <div className="bg-green-50 rounded-2xl p-6 border border-green-100">
-                                    <h2 className="font-medium text-green-900 mb-3 flex items-center gap-2">
-                                        <Banknote size={18} />Bayar di Tempat (COD)
-                                    </h2>
-                                    <p className="text-sm text-green-700">
-                                        Siapkan uang tunai sebesar <strong>{order.total_formatted}</strong> saat barang diterima.
-                                    </p>
+                                <div className="bg-gradient-to-br from-amber-50 to-amber-100/50 rounded-2xl p-6 border border-amber-200 shadow-sm">
+                                    <div className="flex items-center gap-3 mb-4">
+                                        <div className="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center">
+                                            <Banknote size={20} className="text-white" />
+                                        </div>
+                                        <div>
+                                            <h2 className="font-semibold text-amber-900">Bayar di Tempat (COD)</h2>
+                                            <p className="text-xs text-amber-600">Cash on Delivery</p>
+                                        </div>
+                                    </div>
+                                    <div className="bg-white/80 backdrop-blur rounded-xl p-4 border border-amber-100">
+                                        <p className="text-sm text-amber-800">
+                                            Siapkan uang tunai sebesar:
+                                        </p>
+                                        <p className="font-bold text-2xl text-amber-900 mt-1">{order.total_formatted}</p>
+                                        <p className="text-xs text-amber-600 mt-2">
+                                            Pembayaran dilakukan saat barang diterima
+                                        </p>
+                                    </div>
                                 </div>
                             )}
 
@@ -316,10 +343,12 @@ export default function OrderShow({ order, paymentSettings }: Props) {
                                     href={whatsappUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="flex items-center justify-center gap-2 w-full bg-green-500 hover:bg-green-600 text-white py-4 rounded-xl font-medium transition-colors"
+                                    className="group flex items-center justify-center gap-3 w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white py-4 px-6 rounded-2xl font-semibold transition-all duration-300 shadow-lg shadow-green-500/25 hover:shadow-green-500/40 hover:scale-[1.02]"
                                 >
-                                    <MessageCircle size={20} />
-                                    {isBankTransfer ? 'Konfirmasi Transfer via WhatsApp' : 'Konfirmasi Pesanan via WhatsApp'}
+                                    <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center group-hover:bg-white/30 transition-colors">
+                                        <MessageCircle size={18} />
+                                    </div>
+                                    <span>{isBankTransfer ? 'Konfirmasi Transfer via WhatsApp' : 'Konfirmasi Pesanan via WhatsApp'}</span>
                                 </a>
                             )}
                         </div>
