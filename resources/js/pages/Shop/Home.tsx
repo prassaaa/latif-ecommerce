@@ -15,7 +15,7 @@ export default function Home({
     heroSettings,
     trustLogos,
     values,
-    siteSettings: pageSiteSettings,
+    pageSiteSettings,
 }: HomePageProps) {
     const [bannerVisible, setBannerVisible] = useState(false);
     // Get shared siteSettings with contact info

@@ -71,14 +71,10 @@ class HomeController extends Controller
             ['icon' => 'shield-check', 'title' => 'Garansi Selamanya', 'desc' => 'Garansi seumur hidup untuk semua kerusakan struktural karena kami percaya dengan kualitas kami.'],
         ])), true);
 
-        // Site Settings for SEO & Contact
-        $siteSettings = [
+        // Page-specific Site Settings for SEO (siteSettings is shared via middleware)
+        $pageSiteSettings = [
             'name' => Setting::get('site_name', 'Latif Living'),
             'description' => Setting::get('site_description', 'Toko furnitur premium Indonesia'),
-            'phone' => Setting::get('site_phone', ''),
-            'email' => Setting::get('site_email', ''),
-            'address' => Setting::get('site_address', ''),
-            'whatsapp' => Setting::get('social_whatsapp', '6281234567890'),
         ];
 
         return Inertia::render('Shop/Home', [
@@ -88,7 +84,7 @@ class HomeController extends Controller
             'heroSettings' => $heroSettings,
             'trustLogos' => $trustLogos,
             'values' => $values,
-            'siteSettings' => $siteSettings,
+            'pageSiteSettings' => $pageSiteSettings,
         ]);
     }
 }

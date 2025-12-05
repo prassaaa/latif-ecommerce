@@ -236,6 +236,6 @@ export interface HomePageProps {
     heroSettings: HeroSettings;
     trustLogos: string[];
     values: HomeValue[];
-    siteSettings: HomeSiteSettings;
+    pageSiteSettings: HomeSiteSettings;
 }
 
