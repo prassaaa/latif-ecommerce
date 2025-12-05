@@ -76,7 +76,7 @@ class ProductController extends Controller implements HasMiddleware
         $categories = Category::where('is_active', true)->orderBy('name')->get();
 
         return Inertia::render('Admin/Products/Create', [
-            'categories' => CategoryResource::collection($categories),
+            'categories' => CategoryResource::collection($categories)->resolve(),
             'statuses' => collect(ProductStatus::cases())->map(fn ($status) => [
                 'value' => $status->value,
                 'name' => $status->label(),
