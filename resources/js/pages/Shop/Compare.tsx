@@ -93,7 +93,7 @@ export default function Compare({ products }: Props) {
                                 <div className="p-4 bg-terra-50 font-medium text-terra-700">Produk</div>
                                 {products.map((product) => (
                                     <div key={product.id} className="p-4 border-l border-terra-100 relative">
-                                        <button onClick={() => handleRemove(product.id)} className="absolute top-2 right-2 w-8 h-8 bg-terra-100 hover:bg-red-100 hover:text-red-500 rounded-full flex items-center justify-center transition-colors">
+                                        <button onClick={() => handleRemove(product.id)} className="absolute top-2 right-2 w-8 h-8 bg-terra-100 hover:bg-red-100 text-terra-600 hover:text-red-500 rounded-full flex items-center justify-center transition-colors">
                                             <X size={16} />
                                         </button>
                                         <div className="aspect-square rounded-xl overflow-hidden mb-3 bg-sand-50">

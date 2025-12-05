@@ -70,12 +70,12 @@ export const ProductDetail: React.FC<ProductDetailProps> = ({ product, onBack, a
                         {/* Quantity Selector */}
                         <div className="flex items-center gap-6 mb-8">
                             <span className="text-terra-700 font-medium">Jumlah</span>
-                            <div className="flex items-center border border-terra-200 rounded-lg">
-                                <button onClick={() => setSelectedQty(Math.max(1, selectedQty - 1))} className="p-3 hover:bg-terra-50 transition-colors">
+                            <div className="flex items-center border border-terra-200 rounded-lg text-terra-900">
+                                <button onClick={() => setSelectedQty(Math.max(1, selectedQty - 1))} className="p-3 hover:bg-terra-50 transition-colors text-terra-900">
                                     <Minus size={18} />
                                 </button>
-                                <span className="w-12 text-center font-medium">{selectedQty}</span>
-                                <button onClick={() => setSelectedQty(selectedQty + 1)} className="p-3 hover:bg-terra-50 transition-colors">
+                                <span className="w-12 text-center font-medium text-terra-900">{selectedQty}</span>
+                                <button onClick={() => setSelectedQty(selectedQty + 1)} className="p-3 hover:bg-terra-50 transition-colors text-terra-900">
                                     <Plus size={18} />
                                 </button>
                             </div>

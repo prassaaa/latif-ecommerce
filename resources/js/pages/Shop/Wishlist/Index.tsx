@@ -107,7 +107,7 @@ function WishlistCard({ product, onRemove, isRemoving }: WishlistCardProps) {
             <button
                 onClick={onRemove}
                 disabled={isRemoving}
-                className="absolute top-3 right-3 p-2 bg-white/90 backdrop-blur-sm rounded-full text-terra-400 hover:text-red-500 hover:bg-red-50 transition-colors disabled:opacity-50"
+                className="absolute top-3 right-3 p-2 bg-white/90 backdrop-blur-sm rounded-full text-terra-600 hover:text-red-500 hover:bg-red-50 transition-colors disabled:opacity-50"
             >
                 {isRemoving ? (
                     <div className="w-5 h-5 border-2 border-terra-300 border-t-transparent rounded-full animate-spin" />
