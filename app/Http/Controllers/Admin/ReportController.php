@@ -17,10 +17,10 @@ class ReportController extends Controller
     public function index(): Response
     {
         $period = request('period', 'month');
-        
+
         // Sales summary
         $salesQuery = Order::where('payment_status', 'paid');
-        
+
         if ($period === 'week') {
             $salesQuery->where('created_at', '>=', now()->subWeek());
         } elseif ($period === 'month') {
@@ -29,7 +29,7 @@ class ReportController extends Controller
             $salesQuery->where('created_at', '>=', now()->subYear());
         }
 
-        $totalSales = $salesQuery->sum('total');
+        $totalSales = (float) $salesQuery->sum('total');
         $totalOrders = $salesQuery->count();
         $averageOrderValue = $totalOrders > 0 ? $totalSales / $totalOrders : 0;
 
@@ -60,7 +60,7 @@ class ReportController extends Controller
                 'id' => $item->id,
                 'name' => $item->name,
                 'total_sold' => (int) $item->total_sold,
-                'revenue' => 'Rp ' . number_format($item->revenue, 0, ',', '.'),
+                'revenue' => 'Rp ' . number_format((float) $item->revenue, 0, ',', '.'),
             ]);
 
         // Top customers
@@ -75,7 +75,7 @@ class ReportController extends Controller
                 'name' => $user->name,
                 'email' => $user->email,
                 'orders_count' => $user->orders_count,
-                'total_spent' => 'Rp ' . number_format($user->orders_sum_total ?? 0, 0, ',', '.'),
+                'total_spent' => 'Rp ' . number_format((float) ($user->orders_sum_total ?? 0), 0, ',', '.'),
             ]);
 
         // Orders by status
